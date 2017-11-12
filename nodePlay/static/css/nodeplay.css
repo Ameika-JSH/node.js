@@ -1,0 +1,79 @@
+td
+{
+	width : 200px;
+	height : 200px; 
+	border : 1px solid;
+	font-size : 120px;
+	font-weight : bold;
+	text-align : center;
+}
+
+table
+{
+	border-collapse : collapse;
+}
+
+.clicked
+{
+	background-color : red;
+}
+
+table
+{
+	display : none;
+}
+
+#victory
+{	
+	font-size : 60px;
+	font-weight : bold;
+}
+
+textarea
+{
+	display : block;
+	width : 100%;
+}
+
+#shiritori .human
+{
+	background-color : #FFFFCC
+}
+#shiritori .computer
+{
+	background-color : #CCFFCC
+}
+#shiritori #shiritoriResult
+{
+	margin-top : 10px;
+}	
+#shiritori #loading			
+{				
+	background-color : #FFCCCC;
+	display : none;
+}			
+
+
+#endCount
+{
+	font-size : 50px;	
+	padding-left : 3em;
+	margin-top : 30px;
+	margin-bottom : 30px;
+}
+
+#restartMsg
+{
+	padding-top : 0px;
+	font-size : 50px;	
+	margin-top : 30px;
+	margin-bottom : 30px;
+}
+
+#shiritori .human,#shiritori .computer,#shiritori #loading		
+{
+	border-radius : 10px;
+	height : 40px;
+	padding-top : 15px;
+	margin : 0;
+}

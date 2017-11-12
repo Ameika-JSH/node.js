@@ -1,0 +1,22 @@
+@media all and (max-device-width:768px) 
+{
+	img,ul
+	{
+		width : 100%;
+	}
+	ul
+	{
+		padding : 2px;
+	}
+}
+
+video
+{
+	max-width : 1280px;
+	width : 100%;	
+}
+
+.center
+{
+	text-align : center;
+}

@@ -1,0 +1,28 @@
+td
+{
+	width : 200px;
+	height : 200px; 
+	border : 1px solid;
+	font-size : 120px;
+	font-weight : bold;
+	text-align : center;
+}
+
+table
+{
+	border-collapse : collapse;
+	margin : auto;
+	width : 600px;
+}
+
+table
+{
+	display : none;
+}
+
+#victory
+{	
+	font-size : 60px;
+	font-weight : bold;
+}
+
