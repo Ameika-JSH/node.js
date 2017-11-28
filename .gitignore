@@ -5,3 +5,4 @@ ignore/
 *.
 shiritoriResult/
 *.mp4
+meetingScheduler/router/account.js
