@@ -1,0 +1,148 @@
+<html>
+	<head>
+		<style>
+			div {white-space : pre;}
+			#ddbJson {margin-top : 30px; width : 100%; height : 50%;}
+			.rsltTA {margin-top : 30px; width : 100%; height : 30%;}
+			button {margin-top : 20px;margin-bottom : 20px;}
+			p { margin-top : 5px; margin-bottom : 5px;}
+			.devider { border-top : 2px solid; padding-top : 40px;}
+		</style>
+	</head>
+	<body>
+		<p>숫자 변환 타입을 입력 해주세요(int,long,double)</p>
+		<p>기본값은 int 입니다.</p>
+		<input id = 'numType' placeholder="int,long,double">
+		<p>데이터베이스 키값은 분석하지 못합니다. 확인하시고 키값은 직접 수정 해 주세요.</p>
+		<textarea id = 'ddbJson'></textarea>
+		<button onclick = 'start()' id = 'ddb'>변환 시작</button>
+		<div id = 'defaultRslt'></div>
+		<script>
+		const numTypes = 
+			{
+				int : 'int',
+				long : 'long',
+				double : 'dobule',
+				float : 'float'
+			}
+			
+		const javaTypes = 
+			{
+				S : 'String',
+				N : getNumType(),
+				NULL : 'boolean',
+				L : 'List',
+				M : 'Map'
+			}
+		
+		function start()
+		{			
+			
+			document.getElementById('defaultRslt').innerHTML = '';
+			ddbTextToJavaText(JSON.parse(document.getElementById('ddbJson').value),'mainRslt','');
+		}
+		function ddbTextToJavaText(json,id,title)
+		{
+			let jsonKeys = Object.keys(json);
+			let rtnStr = "";
+			let keyTypeLog = "";
+			let objectLog = [];
+			jsonKeys.forEach((key)=>
+			{
+				let jsonData = getKeyValueArray(json[key]);
+				let type = jsonData[0];
+				keyTypeLog += key + ' : ' + type + '\n';
+				if(type == 'L' || type == 'M')
+				{
+					objectLog.push({[key] : jsonData[1]});
+				}
+				
+				rtnStr += '@DynamoDBAttribute(attributeName = "' + key + '")\n';
+				rtnStr += 'private ' + getJavaType(type,key) + ' ' + underBarToCamel(key,false) + ';\n\n';
+			});
+
+			let titleP = document.createElement('P');
+			titleP.classList.add('devider');
+			titleP.innerHTML = title + ' - 변환 결과';
+			
+			let rsltTA = document.createElement('TEXTAREA');
+			rsltTA.classList.add('rsltTA');
+			rsltTA.id = id;
+			rsltTA.value = rtnStr;
+			
+			let copyBtn = document.createElement('BUTTON');
+			copyBtn.innerHTML = '결과 복사';
+			copyBtn.onclick = function(){rsltCopy(id);};
+			
+			document.getElementById('defaultRslt').appendChild(titleP);
+			document.getElementById('defaultRslt').appendChild(rsltTA);
+			document.getElementById('defaultRslt').appendChild(copyBtn);
+			convertInnerObject(objectLog);
+		}
+		
+		function convertInnerObject(objs)
+		{
+			objs.forEach((json)=>
+			{
+				console.log(json);
+				let modelName = Object.keys(json)[0];
+				let innerJson = json[modelName][0]['M'];
+				ddbTextToJavaText(innerJson,modelName,modelName);
+			});
+		}
+		
+		function rsltCopy(id)
+		{
+			let copyText = document.getElementById(id);
+			copyText.select();
+			document.execCommand("Copy");
+			alert("복사되었습니다 : " + copyText.value);
+		}
+		
+		function getJavaType(type,key)
+		{
+			
+			if(type == 'L') return 'List<' + underBarToCamel(key,true) + '>';
+			else if(type == 'L') return underBarToCamel(key,true);
+			else if(javaTypes[type]) return javaTypes[type];
+			else return '\/\/적절한 타입을 찾지 못했습니다.\nObject';
+		}
+
+		function getNumType()
+		{
+			let numType = document.getElementById('numType').value.toLowerCase();
+			if(numTypes[numType]) return numTypes[numType];
+			else return 'int';
+		}
+			
+		function underBarToCamel(key,isModelName)
+		{
+			key = key.toLowerCase();
+			if(key.includes('_'))
+			{
+				let keyArr = key.split('_');
+				let camelStr = "";
+				let i = 1;
+				
+				if(isModelName) i = 0;
+				else camelStr += keyArr[0];
+				
+				for( i ; i < keyArr.length ; i++)
+				{
+					let head = keyArr[i][0];
+					camelStr += keyArr[i].replace(head,head.toUpperCase());
+				}		
+				return camelStr;
+			}
+			else
+				return key;
+		}
+
+		function getKeyValueArray(json)
+		{
+			return Object.keys(json).concat(Object.values(json));
+		}
+		
+		</script>
+	</body>
+</html>
