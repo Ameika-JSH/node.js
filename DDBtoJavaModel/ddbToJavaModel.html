@@ -117,7 +117,25 @@
 			
 		function underBarToCamel(key,isModelName)
 		{
-			return key.toLowerCase().replace(/_([a-z])/g,(reg,capture,indx,input)=>{return capture.toUpperCase();});
+			key = key.toLowerCase();
+			if(key.includes('_'))
+			{
+				let keyArr = key.split('_');
+				let camelStr = "";
+				let i = 1;
+				
+				if(isModelName) i = 0;
+				else camelStr += keyArr[0];
+				
+				for( i ; i < keyArr.length ; i++)
+				{
+					let head = keyArr[i][0];
+					camelStr += keyArr[i].replace(head,head.toUpperCase());
+				}		
+				return camelStr;
+			}
+			else
+				return key;
 		}
 
 		function getKeyValueArray(json)
