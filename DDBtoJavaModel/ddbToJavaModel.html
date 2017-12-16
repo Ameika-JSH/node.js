@@ -26,7 +26,7 @@
 				float : 'float'
 			}
 			
-		const javaTypes = 
+		const ddbJavaTypes = 
 			{
 				S : 'String',
 				N : getNumType(),
@@ -35,12 +35,57 @@
 				M : 'Map'
 			}
 		
+		const sqlJavaTypes = 
+			{
+				'int' : 'int',
+				'varchar' : 'String',
+				'datetime' : 'Timestamp'
+			}
+		
 		function start()
-		{			
-			
+		{						
 			document.getElementById('defaultRslt').innerHTML = '';
-			ddbTextToJavaText(JSON.parse(document.getElementById('ddbJson').value),'mainRslt','');
+			let str = document.getElementById('ddbJson').value;
+			if(str.startsWith('CREATE')) sqlCreateTextToJavaText(str,'mainRslt');
+			else ddbTextToJavaText(JSON.parse(str),'mainRslt','DDB to Model ');
 		}
+		
+		function sqlCreateTextToJavaText(sql,id)
+		{
+			let modelName = underBarToCamel(/.*`(.*)`/.exec(sql)[1]);
+			modelName = modelName.replace(modelName[0],modelName[0].toUpperCase());
+			
+			let rtnStr = "@Data\npublic class ";
+			rtnStr += modelName;
+			rtnStr += " implements Serializable{\n\n";
+			
+			let colLines = /\n(.*)\n\)/s.exec(sql)[1].split('\n');
+			console.log(colLines);
+			colLines.forEach((col)=>
+			{
+				if(col.split(' ')[2].startsWith('`'))
+				{
+					let lineArray = col.split(' ');
+					
+					let variableName = underBarToCamel(lineArray[2].replace(/`/g,''));
+					
+					let varibaleType = lineArray[3];
+					if(varibaleType.endsWith('char(1)')) varibaleType = 'char';
+					else varibaleType = sqlJavaTypes[varibaleType.split('(')[0]];
+					
+					let commnetKey = 'COMMENT';
+					let variableComment = lineArray.includes(commnetKey) 
+										  ? lineArray[lineArray.indexOf(commnetKey)+1].replace(/'/g,'').replace(/,/g,'') 
+										  : '';
+										  
+					rtnStr += "\tprivate " + varibaleType + " " + variableName + ";"
+					if(variableComment != '') rtnStr += " \/\/" + variableComment;
+					rtnStr +=  '\n';
+				}
+			});
+			showResult(rtnStr + '\n}',id,modelName);
+		}
+		
 		function ddbTextToJavaText(json,id,title)
 		{
 			let jsonKeys = Object.keys(json);
@@ -61,6 +106,12 @@
 				rtnStr += 'private ' + getJavaType(type,key) + ' ' + underBarToCamel(key,false) + ';\n\n';
 			});
 
+			showResult(rtnStr,id,title);
+			convertInnerObject(objectLog);
+		}
+		
+		function showResult(rtnStr,id,title)
+		{	
 			let titleP = document.createElement('P');
 			titleP.classList.add('devider');
 			titleP.innerHTML = title + ' - 변환 결과';
@@ -77,7 +128,6 @@
 			document.getElementById('defaultRslt').appendChild(titleP);
 			document.getElementById('defaultRslt').appendChild(rsltTA);
 			document.getElementById('defaultRslt').appendChild(copyBtn);
-			convertInnerObject(objectLog);
 		}
 		
 		function convertInnerObject(objs)
@@ -104,7 +154,7 @@
 			
 			if(type == 'L') return 'List<' + underBarToCamel(key,true) + '>';
 			else if(type == 'L') return underBarToCamel(key,true);
-			else if(javaTypes[type]) return javaTypes[type];
+			else if(ddbJavaTypes[type]) return ddbJavaTypes[type];
 			else return '\/\/적절한 타입을 찾지 못했습니다.\nObject';
 		}
 
