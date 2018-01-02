@@ -1,0 +1,21 @@
+div.colDiv {
+	display: inline-block;
+	padding: 0;
+	border-radius : 10px;
+	height : 320px;	
+	background-color : #79545417;	
+}
+div.colDiv p
+{
+	text-align : center;
+}
+
+#toggleBtn, #btnRoomInsert
+{
+    float: right;
+}
+
+.input-group-text
+{
+	width : 100px;
+}

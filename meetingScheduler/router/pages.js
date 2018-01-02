@@ -5,7 +5,7 @@ const path = require('path');
 
 const root = path.join(path.dirname(__dirname), '/pages/');
 
-const pageList = ["timeTable"];
+const pageList = ["timeTable","roomData"];
 /*
 router.get('*',function(req,res,next)
 {
