@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body class = 'center'>
+		<span id='test' class='test' data='test' data-target>test</span>
+		<span id='test2' class='test' data='test' data-target>test</span>
+		<div id='parent'>
+			<div id='child'></div>
+		</div>
+		<script src = 'jquery.min.js'></script>
+		<script>
+			$("#test").click(function()
+			{				
+				if($(this).attr('data'));
+			});	
+			
+			$("#test2").click(function()
+			{
+				if(this.getAttribute('data'));
+			});
+			
+			function timeTest(cnt)
+			{
+				console.time('selector');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					$("#parent #child");
+				}
+				console.timeEnd('selector');	
+				
+				console.time('find');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					$("#parent").find("#child");
+				}
+				console.timeEnd('find');	
+			/*
+				console.time('jquery tag');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					$("span");
+				}
+				console.timeEnd('jquery tag');		
+				
+				console.time('jquery id');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					$("#test");
+				}
+				console.timeEnd('jquery id');		
+							
+				console.time('jquery class');
+				for(let i = 0; i<cnt ; i++)
+				{
+					$(".test");
+				}
+				console.timeEnd('jquery class');
+				
+				console.time('jquery attr');
+				for(let i = 0; i<cnt ; i++)
+				{
+					$('[data=test]');
+				}
+				console.timeEnd('jquery attr');
+				
+				/*console.time('document id');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					document.getElementById('test');
+				}
+				console.timeEnd('document id');		
+							
+				console.time('document class');
+				for(let i = 0; i<cnt ; i++)
+				{
+					document.getElementsByClassName('test');
+				}
+				console.timeEnd('document class');
+				
+				
+				console.time('test click');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					$(document.getElementById('test')).click();
+				}
+				console.timeEnd('test click');	
+				
+				console.time('test2 click');		
+				for(let i = 0; i<cnt ; i++)
+				{
+					$(document.getElementById('test2')).click();
+				}
+				console.timeEnd('test2 click');		*/
+			}
+		</script>
+	</body>
+</html>

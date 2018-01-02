@@ -5,15 +5,13 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const port = 80;
+const port = 81;
 
 app.use(express.static('static'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', require('./router/pages'));
-
-const routerNames = ['pages','ajax','sqlite'];
-routerNames.forEach(function(data){app.use('/' + data, require('./router/' + data));});
+app.use('/ajax', require('./router/ajax'));
 
 app.listen(port,function(){console.log('nodeServer(port = ' + port + ')  Start at : ' + new Date().toLocaleString());});

@@ -1,0 +1,54 @@
+.center
+{
+	text-align : center;
+}
+
+.divided
+{
+	width : 100%;
+	margin : auto;
+}
+#inputDiv
+{
+	overflow : auto;
+	height : 40px;
+}
+
+#resultDiv
+{
+	overflow-y : scroll;
+	height : 800px;
+}
+
+#resultDiv::-webkit-scrollbar 
+{
+	display : none;
+}
+
+#endCount
+{
+	height : 30px;
+	font-size : 50px;	
+}
+
+#restartMsg
+{
+    padding-top: 0px;
+    font-size: 50px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 60px;
+}
+
+.resultP
+{
+	border-radius : 10px;
+	height : 30px;
+	padding-top : 7px;
+	margin : 0;
+}
+
+p
+{
+	margin : 0;
+}

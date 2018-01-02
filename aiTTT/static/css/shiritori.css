@@ -1,0 +1,26 @@
+#shiritori .human
+{
+	background-color : #FFFFCC
+}
+#shiritori .computer
+{
+	background-color : #CCFFCC
+}
+#shiritori #shiritoriResult
+{
+	margin-top : 10px;
+}	
+#shiritori #loading			
+{				
+	background-color : #FFCCCC;
+	display : none;
+}			
+
+
+#shiritori .human,#shiritori .computer,#shiritori #loading		
+{
+	border-radius : 10px;
+	height : 40px;
+	padding-top : 15px;
+	margin : 0;
+}

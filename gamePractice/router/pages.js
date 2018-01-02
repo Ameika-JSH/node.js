@@ -3,10 +3,8 @@ const router = require('express').Router();
 const fs = require('fs');
 const path = require('path');
 
-const root = path.join(path.dirname(__dirname), '/pages/');
+const root = path.join(path.dirname(__dirname),'/pages/');
 
-const pageList = ["timeTable"];
-/*
 router.get('*',function(req,res,next)
 {
 	console.log(new Date().toLocaleString());
@@ -15,17 +13,16 @@ router.get('*',function(req,res,next)
 	console.log(req.headers['user-agent']);
 	next();
 });
-*/
+
 router.get('/',function(req,res)
 {
-	res.render(root + 'main.ejs',{page:"test"});	
+	res.sendFile(root + 'main.html');	
 });
 
 router.get('/:pageName',function(req,res)
 {
-    const pageName = req.params.pageName;
-    if (fs.existsSync(root + pageName + '.ejs') && pageList.includes(pageName))
-        res.render(root + 'main.ejs', { page : pageName });
+	if(fs.existsSync(root + req.params.pageName + '.html'))
+		res.sendFile(root + req.params.pageName + '.html');	
 	else
 		res.send('잘못된 접근 입니다.');
 });

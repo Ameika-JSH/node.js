@@ -1,6 +1,4 @@
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -13,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', require('./router/pages'));
 
-const routerNames = ['pages','ajax','sqlite'];
+const routerNames = [];
 routerNames.forEach(function(data){app.use('/' + data, require('./router/' + data));});
 
 app.listen(port,function(){console.log('nodeServer(port = ' + port + ')  Start at : ' + new Date().toLocaleString());});
