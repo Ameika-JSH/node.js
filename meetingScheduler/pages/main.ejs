@@ -40,22 +40,21 @@
     <script src="js/popper.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-	<script src="js/meetingRoom.js"></script>
 	<script src="js/sweetalert.min.js"></script>
     <% if (page == "timeTable") { %>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/bootstrap-datepicker.kr.min.js"></script>
 	<script>
-	let dataPicker = $('.timePicker').datepicker({
+	let datePicker = $('.timePicker').datepicker({
 		maxViewMode: 1,
 		todayBtn: "linked",
 		language: "kr",
 		keyboardNavigation: false,
 		forceParse: false,
-		daysOfWeekDisabled: "0,6",
 		todayHighlight: true
 	});
 	</script>
 	<% } %>
+	<script src="js/meetingRoom.js"></script>
   </body>
 </html>

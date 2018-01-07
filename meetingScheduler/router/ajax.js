@@ -2,7 +2,7 @@ const express = require('express');
 const router = require('express').Router();
 const fs = require('fs');
 const sqlite = require("./sqlite.js");
-
+const crypto = require('crypto');
 
 const defaultPage = "timeTable";
 
@@ -10,7 +10,8 @@ const defaultPage = "timeTable";
 
 router.post('/login', function (req, res) {		
 	let param = req.body;
-	req.session.loginId=param.inputId;
+	let sha256 = crypto.createHash('sha256');
+	param.inputPw = sha256.update(param.inputPw).digest('hex');
 	sqlite.dbRun("SELECT * FROM EMP_INFO WHERE " +
 	             "ID=?inputId AND " + 
 				 "PW=?inputPw",param,"직원 정보 조회")
@@ -26,6 +27,24 @@ router.post('/login', function (req, res) {
 	})
 	.catch(()=>{res.send(false);});
 });
+
+/* Time Table */
+router.get('/timeTable/officeList', function (req, res) {	
+	let param = req.query;
+	console.log(param);
+	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
+	.then((rows)=>{res.send(rows);})
+	.catch(()=>{res.send(false);});
+});
+
+router.get('/timeTable/reserveList', function (req, res) {	
+	let param = req.query;
+	console.log(param);
+	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
+	.then((rows)=>{res.send(rows);})
+	.catch(()=>{res.send(false);});
+});
+
 
 /* Room Info */
 router.get('/roomInfo', function (req, res) {	

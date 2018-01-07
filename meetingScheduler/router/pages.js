@@ -31,6 +31,15 @@ router.get('*',function(req,res,next)
 	else next();
 });
 
+router.get('/timeTable',function(req,res)
+{
+	sqlite.dbRun("SELECT DISTINCT OFFICE FROM ROOM_INFO",undefined,"회의실 정보 조회")
+	.then((rows)=>
+	{		
+		console.log(rows);
+		res.render(root + 'main.ejs', { page : "timeTable", data : rows});
+	});	
+});
 
 router.get('/roomMng',function(req,res)
 {

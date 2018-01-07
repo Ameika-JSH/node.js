@@ -1,7 +1,7 @@
 (function()
 {
 	const pageName = $("#pageName").val();
-	$.fn.forEach = Array.prototype.forEach;
+	//$.fn.forEach = Array.prototype.forEach;
 	function init()
 	{
 		btnRoomDelete();
@@ -16,7 +16,9 @@
 		$(".meetingRoomPicker").animate({height:'toggle'},
 		function()
 		{
-			$(btn).html() == "▲" ? $(btn).html("▼") : $(btn).html("▲")
+			let up = '<i class="fa fa-chevron-up"></i>';
+			let down = '<i class="fa fa-chevron-down"></i>'
+			$(btn).html() == up ? $(btn).html(down) : $(btn).html(up);
 		});
 	});
 	
@@ -84,7 +86,8 @@
 			url = "ajax/login";
 			ajaxCallback = function(result)
 			{
-				location.href = result;
+				if(result) location.href = result;
+				else errSwal('로그인','로그인 정보가 일치하지 않습니다.');
 			}
 		}
 		else
@@ -106,6 +109,103 @@
 			});
 		}
 	});	
+	
+	$("#inputId").keydown(function(e)
+	{
+		if(event.keyCode == 13) $("#inputPw").focus();
+	});
+	$("#inputPw").keydown(function(e)
+	{
+		if(event.keyCode == 13) $("#btnLogin").click();
+	});
+	
+	
+	$(".btnOffice").click(function()
+	{		
+		let btnBlack = 'btn-black';
+		let btnOutlineBlack = 'btn-outline-black';
+		if($(this).is('.'+btnBlack))
+		{	
+			btnToggle(this,'btnOffice',btnBlack,btnOutlineBlack);
+			$(".timePicker").animate({height:'hide'});
+			$(".btnOffice." + btnOutlineBlack).removeClass(btnOutlineBlack).addClass(btnBlack);
+			$(this).removeClass(btnBlack).addClass(btnOutlineBlack);
+			$.ajax(
+			{
+				type : 'get',
+				url : 'ajax/timeTable/officeList',
+				data : {office : $(this).html()},
+				success : function(result)
+				{
+					let btnFront = "<button class='btn btn-black btnRoom'>";
+					let btnsHtml ="";
+					for(let i = 0,limit = result.length ; i<limit;i++)
+					{
+						btnsHtml += btnFront + result[i].ROOM + '</button>';
+					}
+					$("#divRoom").html(btnsHtml);
+					$(".btnRoom").click(function()
+					{
+						btnToggle(this,'btnRoom',btnBlack,btnOutlineBlack);
+			$(".timePicker").animate({height:'show'});
+					});
+					$(".roomPicker").animate({height:'show'})
+				}
+			});			
+		}
+	});
+
+	if($("#pageName").val() == "timeTable")
+	{
+		datePicker.datepicker().on('changeDate',function(e)
+		{ 			
+			let data = {};
+			data.office = $("#divOffice .btn-outline-black").html();
+			data.room = $("#divRoom .btn-outline-black").html();
+			data.date = e.date.toLocaleDateString();
+			if(!Object.values(data).includes(undefined))
+			{
+				$.ajax(
+				{
+					type : 'get',
+					url : 'ajax/timeTable/reserveList',
+					data : data,
+					success : function(result)
+					{
+						console.log(result);
+						let timeHtml;
+						timeHtml = 
+								"<span class = 'spanTime'><p>1</p></span>" + 
+								"<span class = 'spanTime'><p>2</p></span>" + 
+								"<span class = 'spanTime'><p>3</p></span>" + 
+								"<span class = 'spanTime'><p>4</p></span>" + 
+								"<span class = 'spanTime'><p>5</p></span>" + 
+								"<span class = 'spanTime'><p>6</p></span>" + 
+								"<span class = 'spanTime'><p>7</p></span>" + 
+								"<span class = 'spanTime'><p>8</p></span>" + 
+								"<span class = 'spanTime'><p>9</p></span>" + 
+								"<span class = 'spanTime'><p>0</p></span>" + 
+								"<span class = 'spanTime'><p>1</p></span>" + 
+								"<span class = 'spanTime'><p>2</p></span>" + 
+								"<span class = 'spanTime'><p>3</p></span>" + 
+								"<span class = 'spanTime'><p>4</p></span>" + 
+								"<span class = 'spanTime'><p>5</p></span>" + 
+								"<span class = 'spanTime'><p>6</p></span>" + 
+								"<span class = 'spanTime'><p>7</p></span>" + 
+								"<span class = 'spanTime'><p>8</p></span>";
+						$("#divTime").html(timeHtml);
+					}
+				});
+			}
+		});
+	}
+	
+	
+	function btnToggle(thisBtn,btnClass,btnColor,btnOutline)
+	{
+		$("." + btnClass + "." + btnOutline).removeClass(btnOutline).addClass(btnColor);
+		$(thisBtn).removeClass(btnColor).addClass(btnOutline);		
+	}
 	
 	
 	function btnRoomDelete()
@@ -230,11 +330,15 @@
 		return str;
 	}
 	
-	function errSwal(act)
+	function errSwal(act,inputText)
 	{
+		let text;
+		if(inputText) text = inputText;
+		else text = act + "도중 에러가 발생하였습니다.";
+		
 		swal({
 				title: act + " 실패",
-				text: act + "도중 에러가 발생하였습니다.",
+				text: text,
 				type: "error",
 				confirmButtonClass: "btn-danger",
 				confirmButtonText: "확 인"

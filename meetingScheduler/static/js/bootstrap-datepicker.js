@@ -1988,7 +1988,7 @@
 				M: dates[language].monthsShort[date.getUTCMonth()],
 				MM: dates[language].months[date.getUTCMonth()],
 				yy: date.getUTCFullYear().toString().substring(2),
-				yyyy: date.getUTCFullYear()
+				yyyy: date.getUTCFullYear() + '년 '
 			};
 			val.dd = (val.d < 10 ? '0' : '') + val.d;
 			val.mm = (val.m < 10 ? '0' : '') + val.m;
@@ -1999,7 +1999,7 @@
 					date.push(seps.shift());
 				date.push(val[format.parts[i]]);
 			}
-			return date.join('');
+			return date.reverse().join('');
 		},
 		headTemplate: '<thead>'+
 			              '<tr>'+

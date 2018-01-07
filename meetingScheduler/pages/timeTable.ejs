@@ -1,12 +1,19 @@
-<div class = "meetingRoomPicker">
-	<div class = "colDiv col-sm-2">
-		<p>층수</p>
+<div class = "row meetingRoomPicker justify-content-center">
+	<div class = "colDiv col-lg-2">
+		<p>사무실</p>	
+		<div id = "divOffice" class = 'divScroll'>
+		<% for(var i = 0; i<data.length;i++){ %>
+		<button class='btn btn-black btnOffice'><%=data[i].OFFICE%></button>
+		<% } %>
+		</div>
 	</div>
-	<div class = "colDiv col-sm-3">
-	  <p>회의실</p>
+	<div class = "colDiv col-lg-3 roomPicker">
+		<p>회의실</p>
+		<div id = "divRoom" class = 'divScroll'></div>
 	</div>
-	<div class = "colDiv col-sm-6 timePicker">
+	<div class = "colDiv col-lg-6 timePicker">
 		<p>날짜</p>
 	</div>
 </div>
-<button id = "toggleBtn" class = 'btn btn-secondary'>▲</button>
+<button id = "toggleBtn" class = 'btn btn-secondary'><i class="fa fa-chevron-up"></i></button>
+<div id = 'divTime' class='row'></div>

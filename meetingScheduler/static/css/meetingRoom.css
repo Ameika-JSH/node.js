@@ -21,27 +21,6 @@ i:before
 	font-size : 16px;
 }
 
-div.colDiv {
-	padding: 0;
-	border-radius : 10px;
-	height : 320px;	
-	background-color : #79545417;	
-}
-div.colDiv p
-{
-	text-align : center;
-}
-
-#toggleBtn, #btnRoomInsert
-{
-    float: right;
-}
-
-
-#roomTable
-{
-	overflow : scroll;
-}
 
 .input-group-text
 {
@@ -88,6 +67,105 @@ li.active
 	margin-top : 10px;
 	text-align : right;
 }
+
+/* Time Table */
+div.colDiv {
+	margin : 0px 10px;
+	border-radius : 10px;
+	height : 320px;	
+	background-color : #79545417;	
+}
+div.colDiv p
+{
+	text-align : center;
+	margin : 10px 0px;
+	font-weight : bold;
+	height : 7.5%
+}
+
+#toggleBtn, #btnRoomInsert
+{
+    float: right;
+}
+
+#roomTable
+{
+	overflow : scroll;
+}
+.btnOffice,.btnRoom
+{
+	width : 100%;
+	margin : 5px 0px;
+}
+button.btn-outline-black:hover
+{
+	background-color : transparent;
+	color : #000;
+}
+button.btn-outline-black:focus
+{
+	box-shadow : 0 0 0 0.2rem rgba(0,0,0,0)
+}
+.divScroll
+{
+	overflow : scroll;
+}
+.divScroll::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+#divOffice
+{
+	height : 87.5%;
+}
+
+.timePicker,.roomPicker
+{
+	display : none;
+}
+#divTime
+{
+	margin : 50px 0px 0px 0px;
+	--border : 1px solid;
+}
+.spanTime
+{	
+	width : calc(100% / 18);
+	height : 100px;
+	border-top : var(--border);
+	border-bottom : var(--border);
+	text-align : center;
+	align-items : center;
+	display: inline-flex;
+}
+
+.spanTime p
+{
+	display : inline-block;
+	width : 100%;
+}
+
+.spanTime:first-child
+{
+	border-left : 1px solid;	
+	border-top-left-radius : 10px;
+	border-bottom-left-radius : 10px;
+}
+.spanTime:nth-child(odd)
+{
+	border-right : 1px dotted;	
+}
+.spanTime:nth-child(even)
+{
+	border-right : 1px solid;	
+}
+.spanTime:last-child
+{
+	border-top-right-radius : 10px;
+	border-bottom-right-radius : 10px;
+}
+
 
 /* ROOM INFO Table*/
 .inputDataDiv
