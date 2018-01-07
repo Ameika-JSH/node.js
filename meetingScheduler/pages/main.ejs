@@ -8,25 +8,29 @@
     <!--<link rel="icon" href="../../../../favicon.ico"> -->
 
     <title>회의실 관리</title>
-
+	<link rel="shortcut icon" href="/img/mtIcon.png">
+	
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/sticky-footer-navbar.css" rel="stylesheet">
 	
+	<link href="css/theme-style.min.css" rel="stylesheet">
     <link href="css/meetingRoom.css" rel="stylesheet">
     <link href="css/sweetalert.css" rel="stylesheet">
-		
+    <link href="css/font-awesome.css" rel="stylesheet">
+	
     <% if (page == "timeTable") { %>
 	<link href="css/bootstrap-datepicker3.css" rel="stylesheet">
 	<% } %>
   </head>
 
   <body>
+	<input id='pageName' value='<%=page %>'>
     <%include header%>
     <!-- Begin page content -->
-    <main role="main" class="container">
+    <main role="main" class="container"><!--user icon in two different styles-->
 		<%-include(page)%>
     </main>
     <%include footer%>   

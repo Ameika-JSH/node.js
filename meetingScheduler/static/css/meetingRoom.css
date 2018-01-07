@@ -1,5 +1,27 @@
+body
+{
+	background-color : #DDDDDD;
+	height : var(--breakpoint-lg);
+	font-family : "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+main
+{
+	background-color : #FFFFFF;
+	height : var(--breakpoint-lg);
+}
+
+footer
+{
+	text-align : right;
+}
+
+i:before
+{
+	font-size : 16px;
+}
+
 div.colDiv {
-	display: inline-block;
 	padding: 0;
 	border-radius : 10px;
 	height : 320px;	
@@ -15,7 +37,168 @@ div.colDiv p
     float: right;
 }
 
+
+#roomTable
+{
+	overflow : scroll;
+}
+
 .input-group-text
 {
 	width : 100px;
 }
+
+.nav-title
+{
+	padding-left : 1em;
+}
+
+li.active
+{
+	background-color : var(--red);
+}
+
+
+/* Login Page*/
+
+#btnLogin
+{
+	width : 100%;
+	height : 100%;
+}
+
+#btnLogin i:before
+{
+	font-size : 25px;
+}
+
+.loginDataDiv .input-group:last-child
+{
+	margin-bottom : 0 !important;
+}
+
+.loginLabel
+{
+	font-size : 20px;
+	font-weight : bold;
+}
+
+#anchorJoin
+{
+	margin-top : 10px;
+	text-align : right;
+}
+
+/* ROOM INFO Table*/
+.inputDataDiv
+{
+	margin-bottom : 30px;
+}
+@media (min-width: 992px){
+	
+	.inputDataDiv .input-group:nth-child(n+3)
+	{
+		margin-bottom : 0 !important;
+	}
+	
+	.btnRoomUpdate,.btnRoomDelete
+	{
+		width : 5em;
+	}
+	.tdButtons
+	{
+		width : 7.8em;
+	}
+	.office
+	{
+		width : 4em;
+		text-align : center;
+	}
+	.size
+	{
+		width : 5em;
+		text-align : center;
+	}
+}
+@media (max-width: 576px){
+	.ar
+	{
+		display : none;
+	}	
+	
+	.btnRoomUpdate,.btnRoomDelete
+	{
+		width : 3em;
+	}
+	.tdButtons
+	{
+		width : 6.1em;
+	}
+	
+	.office,
+	.size
+	{
+		width : 4em;
+		text-align : center;
+	}
+	
+	.nav-item
+	{
+		margin : 0px 10px;
+	}
+
+}
+
+table#roomInfoTable
+{
+	font-size : 15px;
+}
+
+.inputRoomInfo
+{
+	width : 100%;
+}
+
+#roomInfoTable
+{
+	table-layout : fixed;
+}
+
+#roomInfoTable thead,#tableLabel
+{
+	font-size : 18px;
+	background-color : #cb3d3f;
+	border-color : #af393b;
+	text-align : center;
+}
+#roomInfoTable thead>tr>th,#tableLabel
+{
+	font-weight : bold !important;
+	border-color : #af393b !important;
+}
+
+#tableLabel
+{
+	padding : 10px;
+	margin-bottom : 0px;
+	border: 1px solid;
+}
+
+#roomInfoTable td
+{
+	text-overflow : ellipsis;
+	overflow : hidden;
+	white-space:nowrap;
+}
+
+#btnRoomInsert
+{
+	width : 100%;
+	height : 100%;
+}
+
+#btnRoomInsert i:before
+{
+	font-size : 25px;
+}
+
