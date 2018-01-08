@@ -24,6 +24,7 @@
 	
 	$("#btnRoomInsert").click(function()
 	{		
+		spinnerToggle();
 		let data = {
 			"inputOffice" : $("#inputOffice").val(),
 			"inputRoom" : $("#inputRoom").val(),
@@ -57,13 +58,16 @@
 					}
 					else
 						errSwal('입력');
+					spinnerToggle();
 				}
 			});
 		}
+		spinnerToggle(-1);
 	});
 	
 	$("#btnLogin").click(function()
 	{
+		spinnerToggle();
 		let data = {
 			"inputId" : $("#inputId").val().toLowerCase(),
 			"inputPw" : $("#inputPw").val()
@@ -88,6 +92,7 @@
 			{
 				if(result) location.href = result;
 				else errSwal('로그인','로그인 정보가 일치하지 않습니다.');
+				spinnerToggle();
 			}
 		}
 		else
@@ -96,6 +101,7 @@
 			ajaxCallback = function(result)
 			{
 				console.log(result);
+				spinnerToggle();
 			}
 		}
 		if(chk)
@@ -108,6 +114,7 @@
 				success : ajaxCallback
 			});
 		}
+		spinnerToggle(-1);
 	});	
 	
 	$("#inputId").keydown(function(e)
@@ -122,6 +129,7 @@
 	
 	$(".btnOffice").click(function()
 	{		
+		spinnerToggle();
 		let btnBlack = 'btn-black';
 		let btnOutlineBlack = 'btn-outline-black';
 		if($(this).is('.'+btnBlack))
@@ -147,18 +155,21 @@
 					$(".btnRoom").click(function()
 					{
 						btnToggle(this,'btnRoom',btnBlack,btnOutlineBlack);
-			$(".timePicker").animate({height:'show'});
+						$(".timePicker").animate({height:'show'});
 					});
 					$(".roomPicker").animate({height:'show'})
+					spinnerToggle(-1);
 				}
 			});			
 		}
+		spinnerToggle(-1);
 	});
 
 	if($("#pageName").val() == "timeTable")
 	{
 		datePicker.datepicker().on('changeDate',function(e)
-		{ 			
+		{ 		
+			spinnerToggle();		
 			let data = {};
 			data.office = $("#divOffice .btn-outline-black").html();
 			data.room = $("#divRoom .btn-outline-black").html();
@@ -175,25 +186,28 @@
 						console.log(result);
 						let timeHtml;
 						timeHtml = 
-								"<span class = 'spanTime'><p>1</p></span>" + 
-								"<span class = 'spanTime'><p>2</p></span>" + 
-								"<span class = 'spanTime'><p>3</p></span>" + 
-								"<span class = 'spanTime'><p>4</p></span>" + 
-								"<span class = 'spanTime'><p>5</p></span>" + 
-								"<span class = 'spanTime'><p>6</p></span>" + 
-								"<span class = 'spanTime'><p>7</p></span>" + 
-								"<span class = 'spanTime'><p>8</p></span>" + 
-								"<span class = 'spanTime'><p>9</p></span>" + 
-								"<span class = 'spanTime'><p>0</p></span>" + 
-								"<span class = 'spanTime'><p>1</p></span>" + 
-								"<span class = 'spanTime'><p>2</p></span>" + 
-								"<span class = 'spanTime'><p>3</p></span>" + 
-								"<span class = 'spanTime'><p>4</p></span>" + 
-								"<span class = 'spanTime'><p>5</p></span>" + 
-								"<span class = 'spanTime'><p>6</p></span>" + 
-								"<span class = 'spanTime'><p>7</p></span>" + 
-								"<span class = 'spanTime'><p>8</p></span>";
+								"<table align='center'>" +								
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
+								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" +
+								"</table>";
 						$("#divTime").html(timeHtml);
+						spinnerToggle();
 					}
 				});
 			}
@@ -277,6 +291,7 @@
 	
 	function doRoomUpdate()
 	{
+		spinnerToggle();
 		let data = {}
 		$(this).parents('tr').find('td:not(.tdButtons)')
 		.forEach((td)=>
@@ -299,6 +314,7 @@
 				}
 				else
 					errSwal('수정');
+				spinnerToggle();
 			}
 		});
 	}
@@ -386,6 +402,12 @@
 	function tooltipInit()
 	{
 		$("[data-toggle]").tooltip();
+	}
+	
+	function spinnerToggle(val)
+	{
+		if(!val) $('#divSpinner').css('z-index',-1 * $('#divSpinner').css('z-index'));
+		else $('#divSpinner').css('z-index',val);
 	}
 	
 	init();
