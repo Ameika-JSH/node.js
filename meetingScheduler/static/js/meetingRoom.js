@@ -1,7 +1,8 @@
+
 (function()
 {
+	'use strict'
 	const pageName = $("#pageName").val();
-	//$.fn.forEach = Array.prototype.forEach;
 	function init()
 	{
 		btnRoomDelete();
@@ -164,6 +165,26 @@
 		}
 		spinnerToggle(-1);
 	});
+	
+	$(".reserved").mouseenter(function()
+	{
+		console.log(event);
+		$("#spanHover").css('display','block');
+	});
+	
+	
+	$(".reserved").mousemove(function()
+	{
+		$("#spanHover")
+		.css('left',event.x+10)
+		.css('top',event.y+10);
+	});
+	
+	$(".reserved").mouseout(function()
+	{
+		console.log(event);
+		$("#spanHover").css('display','none');
+	});
 
 	if($("#pageName").val() == "timeTable")
 	{
@@ -214,6 +235,7 @@
 		});
 	}
 	
+		
 	
 	function btnToggle(thisBtn,btnClass,btnColor,btnOutline)
 	{
@@ -269,9 +291,10 @@
 		$(".btnRoomUpdate").click(function()
 		{
 			let typeNumber = ['office','size'];
-			$(this).html('저장').removeClass('btn-warning').addClass('btn-outline-success').unbind().click(doRoomUpdate)
-			.parents('tr').find('td:not(.tdButtons)')
-			.forEach((td)=>
+			let jqObj = $(this).html('저장').removeClass('btn-warning').addClass('btn-outline-success').unbind().click(doRoomUpdate)
+			.parents('tr').find('td:not(.tdButtons)');
+			
+			for(let i = 0, td = jqObj[0]; i < jqObj.length ; i++, td=jqObj[i])
 			{
 				let input = $("<input>").attr('class','inputRoomInfo');
 				let oldValue;
@@ -285,7 +308,7 @@
 					
 				input.val(oldValue);
 				$(td).attr('data-old-value',oldValue).html(input);
-			});
+			}
 		});
 	}
 	
@@ -293,12 +316,14 @@
 	{
 		spinnerToggle();
 		let data = {}
-		$(this).parents('tr').find('td:not(.tdButtons)')
-		.forEach((td)=>
+		let jqObj = $(this).parents('tr').find('td:not(.tdButtons)');
+		
+		for(let i = 0, td = jqObj[0]; i < jqObj.length ; i++, td=jqObj[i])
 		{
 			data[$(td).attr('class').split(' ')[0]] = $(td).find('input').val();
 			data['old-' + $(td).attr('class').split(' ')[0]] = $(td).attr('data-old-value');
-		});
+		}
+		
 		console.log(data);
 		$.ajax(
 		{
@@ -389,10 +414,10 @@
 							"</td>"
 						"</tr>";
 				let tbody = '';
-				result.forEach((data)=>
+				for(let i=0,data=result[0];i<result.length;i++,data=result[i])
 				{
 					tbody += strFormat(tr,data);
-				});
+				}
 				$("#roomInfoTable tbody").html(tbody);
 				init();
 			}

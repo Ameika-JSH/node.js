@@ -5,7 +5,7 @@ const path = require('path');
 const sqlite = require("./sqlite.js");
 
 const root = path.join(path.dirname(__dirname), '/pages/');
-const pageList = ["timeTable","roomMng","spinner"];
+const pageList = ["timeTable","roomMng","test"];
 /*
 router.get('*',function(req,res,next)
 {

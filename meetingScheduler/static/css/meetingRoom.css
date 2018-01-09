@@ -8,6 +8,7 @@ main
 {
 	background-color : #FFFFFF;
 	min-height : var(--breakpoint-lg);
+	min-height : 992px;
 }
 
 footer
@@ -68,6 +69,94 @@ li.active
 }
 
 /* Time Table */
+#timeTable
+{
+	width : 100%;
+	overflow-x:auto;
+	--border : 1px solid #AAAAAA;
+	--border2 : 2px solid #777777;
+	--border3 : 1px dotted #AAAAAA;
+}
+
+#timeTable div
+{
+	height : 40px;
+	width : 80px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.timeTableHead
+{
+	display : table-header-group;
+}
+
+.timeTableBody
+{
+	display : table-row-group;
+}
+
+.colTime, .colStatus
+{
+	display:table-cell;
+}
+
+.timeTableBody div:first-child .colTimeElement:first-child
+{
+	border : var(--border);
+	border-right : var(--border2);
+}
+
+.timeTableBody div:first-child .colTimeElement:nth-child(n+2)
+{
+	border-left : var(--border);
+	border-bottom : var(--border);
+	border-right : var(--border2);
+}
+
+.timeTableBody div:nth-child(n+2) .colTimeElement:first-child
+{
+	border-top : var(--border);
+	border-bottom : var(--border);
+	border-right : var(--border);
+}
+
+.timeTableBody div:nth-child(n+2) .colTimeElement:nth-child(n+2)
+{
+	border-bottom : var(--border);
+	border-right : var(--border);
+}
+
+.timeTableBody div.colTime div.colTimeElement:nth-child(2n+1),
+.timeTableBody div.colStatus div.colTimeElement:nth-child(2n+1)
+{
+	border-bottom : var(--border3);
+}
+
+.colTimeElement.reserved
+{
+	background-color:#AAAAAA;
+}
+
+.colTimeElement.reserved p
+{
+    position: relative;
+    left: 0px;
+    height: 80px;
+    word-break: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding-top: 20px;
+}
+
+#spanHover
+{
+	display : none;
+	position: fixed;
+}
+
 div.colDiv {
 	margin : 0px 10px;
 	border-radius : 10px;
