@@ -26,7 +26,7 @@ router.get('/',function(req,res)
 
 router.get('*',function(req,res,next)
 {	
-	console.log('전체세션 체크 : ' + req.session.loginId);
+	console.log('모든 유저 세션 체크 : ' + req.session.loginId);
 	if(!req.session.loginId) res.redirect("/");
 	else next();
 });
@@ -43,7 +43,7 @@ router.get('/timeTable',function(req,res)
 
 router.get('/roomMng',function(req,res)
 {
-	sqlite.dbRun("SELECT * FROM ROOM_INFO",undefined,"회의실 정보 조회")
+	sqlite.dbRun("SELECT * FROM ROOM_INFO ORDER BY OFFICE",undefined,"회의실 정보 조회")
 	.then((rows)=>
 	{		
 		console.log(rows);

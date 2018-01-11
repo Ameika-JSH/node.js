@@ -1,8 +1,11 @@
 
 (function()
 {
-	'use strict'
+	'use strict'	
 	const pageName = $("#pageName").val();
+	const SPINNER_OFF = -100;
+	
+	
 	function init()
 	{
 		btnRoomDelete();
@@ -59,11 +62,11 @@
 					}
 					else
 						errSwal('입력');
-					spinnerToggle();
+					spinnerToggle(SPINNER_OFF);
 				}
 			});
 		}
-		spinnerToggle(-1);
+		spinnerToggle(SPINNER_OFF);
 	});
 	
 	$("#btnLogin").click(function()
@@ -93,7 +96,7 @@
 			{
 				if(result) location.href = result;
 				else errSwal('로그인','로그인 정보가 일치하지 않습니다.');
-				spinnerToggle();
+				spinnerToggle(SPINNER_OFF);
 			}
 		}
 		else
@@ -102,7 +105,7 @@
 			ajaxCallback = function(result)
 			{
 				console.log(result);
-				spinnerToggle();
+				spinnerToggle(SPINNER_OFF);
 			}
 		}
 		if(chk)
@@ -115,7 +118,7 @@
 				success : ajaxCallback
 			});
 		}
-		spinnerToggle(-1);
+		spinnerToggle(SPINNER_OFF);
 	});	
 	
 	$("#inputId").keydown(function(e)
@@ -159,32 +162,13 @@
 						$(".timePicker").animate({height:'show'});
 					});
 					$(".roomPicker").animate({height:'show'})
-					spinnerToggle(-1);
+					spinnerToggle(SPINNER_OFF);
 				}
 			});			
 		}
-		spinnerToggle(-1);
-	});
+		spinnerToggle(SPINNER_OFF);
+	});	
 	
-	$(".reserved").mouseenter(function()
-	{
-		console.log(event);
-		$("#spanHover").css('display','block');
-	});
-	
-	
-	$(".reserved").mousemove(function()
-	{
-		$("#spanHover")
-		.css('left',event.x+10)
-		.css('top',event.y+10);
-	});
-	
-	$(".reserved").mouseout(function()
-	{
-		console.log(event);
-		$("#spanHover").css('display','none');
-	});
 
 	if($("#pageName").val() == "timeTable")
 	{
@@ -205,7 +189,7 @@
 					success : function(result)
 					{
 						console.log(result);
-						let timeHtml;
+						/*let timeHtml;
 						timeHtml = 
 								"<table align='center'>" +								
 								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
@@ -226,8 +210,26 @@
 								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
 								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
 								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" +
-								"</table>";
-						$("#divTime").html(timeHtml);
+								"</table>";*/
+						$("#divTime").html(result);
+						$(".reserved").mouseenter(function()
+						{
+							console.log(event);
+							$("#spanHover").css('display','block');
+						});	
+						
+						$(".reserved").mousemove(function()
+						{
+							$("#spanHover")
+							.css('left',event.x+10)
+							.css('top',event.y+10);
+						});
+						
+						$(".reserved").mouseout(function()
+						{
+							console.log(event);
+							$("#spanHover").css('display','none');
+						});
 						spinnerToggle();
 					}
 				});
@@ -290,7 +292,7 @@
 	{
 		$(".btnRoomUpdate").click(function()
 		{
-			let typeNumber = ['office','size'];
+			let typeNumber = ['size'];
 			let jqObj = $(this).html('저장').removeClass('btn-warning').addClass('btn-outline-success').unbind().click(doRoomUpdate)
 			.parents('tr').find('td:not(.tdButtons)');
 			

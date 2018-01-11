@@ -7,7 +7,7 @@ let dbRun = (query,param,msg,res)=>
 {	
 	return new Promise((resolve,reject)=>
 	{
-		const db = new sqlite3.Database('ms.sql');
+		const db = new sqlite3.Database('office.sql');
 		if(param)
 		{
 			Object.keys(param).forEach(function(key)
@@ -26,7 +26,7 @@ let dbRun = (query,param,msg,res)=>
 					console.error(err);
 					reject(err);
 				}
-				else if(rows){
+				else if(rows){					
 					console.log(rows);
 					resolve(rows);
 				}

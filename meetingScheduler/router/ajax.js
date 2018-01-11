@@ -3,7 +3,9 @@ const router = require('express').Router();
 const fs = require('fs');
 const sqlite = require("./sqlite.js");
 const crypto = require('crypto');
+const path = require('path');
 
+const root = path.join(path.dirname(__dirname), '/pages/');
 const defaultPage = "timeTable";
 
 /* Login*/
@@ -12,6 +14,8 @@ router.post('/login', function (req, res) {
 	let param = req.body;
 	let sha256 = crypto.createHash('sha256');
 	param.inputPw = sha256.update(param.inputPw).digest('hex');
+	//sha256 = crypto.createHash('sha256');
+	//sqlite.dbRun('insert into emp_info values("test","' + sha256.update('test').digest('hex') + '","test","test","test")');
 	sqlite.dbRun("SELECT * FROM EMP_INFO WHERE " +
 	             "ID=?inputId AND " + 
 				 "PW=?inputPw",param,"직원 정보 조회")
@@ -41,7 +45,7 @@ router.get('/timeTable/reserveList', function (req, res) {
 	let param = req.query;
 	console.log(param);
 	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
-	.then((rows)=>{res.send(rows);})
+	.then((rows)=>{res.render(root + 'test.ejs');})
 	.catch(()=>{res.send(false);});
 });
 
