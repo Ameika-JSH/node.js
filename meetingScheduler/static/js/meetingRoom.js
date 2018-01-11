@@ -169,7 +169,6 @@
 		spinnerToggle(SPINNER_OFF);
 	});	
 	
-
 	if($("#pageName").val() == "timeTable")
 	{
 		datePicker.datepicker().on('changeDate',function(e)
@@ -187,35 +186,15 @@
 					url : 'ajax/timeTable/reserveList',
 					data : data,
 					success : function(result)
-					{
-						console.log(result);
-						/*let timeHtml;
-						timeHtml = 
-								"<table align='center'>" +								
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" +
-								"</table>";*/
+					{					
 						$("#divTime").html(result);
+						$(".colOffice div:not(.reserved)").click(function()
+						{
+							console.log(1);
+						});
 						$(".reserved").mouseenter(function()
 						{
-							console.log(event);
-							$("#spanHover").css('display','block');
+							$("#spanHover").html($(this).html()).css('display','block');
 						});	
 						
 						$(".reserved").mousemove(function()
@@ -227,7 +206,6 @@
 						
 						$(".reserved").mouseout(function()
 						{
-							console.log(event);
 							$("#spanHover").css('display','none');
 						});
 						spinnerToggle();
@@ -360,7 +338,6 @@
 		function(input)
 		{
 			if(input) $(selector).val(input);
-			resolve(input);
 		});	
 	}
 	

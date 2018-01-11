@@ -86,6 +86,7 @@ dbRun("CREATE TABLE IF NOT EXISTS EMP_INFO " +
 		 "(" +
 		 "ID TEXT," + 
 		 "PW TEXT," +
+		 "NAME TEXT," +
 		 "OFFICE TEXT," +
 		 "GRADE TEXT," +
 		 "PART TEXT," +

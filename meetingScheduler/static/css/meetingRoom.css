@@ -37,6 +37,10 @@ li.active
 	background-color : var(--red);
 }
 
+.center
+{
+	text-align : center;
+}
 
 /* Login Page*/
 
@@ -135,7 +139,7 @@ li.active
 
 .colTimeElement.reserved
 {
-	background-color:#AAAAAA;
+	background-color:#BBB;
 }
 
 .colTimeElement.reserved p
@@ -149,6 +153,11 @@ li.active
     white-space: nowrap;
     vertical-align: middle;
     padding-top: 20px;
+}
+
+.underbar
+{
+	border-bottom : var(--border);
 }
 
 #spanHover

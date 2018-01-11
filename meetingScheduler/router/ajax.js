@@ -36,7 +36,7 @@ router.post('/login', function (req, res) {
 router.get('/timeTable/officeList', function (req, res) {	
 	let param = req.query;
 	console.log(param);
-	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
+	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office ORDER BY ROOM",param,"회의실 정보 조회")
 	.then((rows)=>{res.send(rows);})
 	.catch(()=>{res.send(false);});
 });
@@ -44,9 +44,9 @@ router.get('/timeTable/officeList', function (req, res) {
 router.get('/timeTable/reserveList', function (req, res) {	
 	let param = req.query;
 	console.log(param);
-	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
-	.then((rows)=>{res.render(root + 'test.ejs');})
-	.catch(()=>{res.send(false);});
+	sqlite.dbRun("SELECT * FROM ROOM_INFO ORDER BY OFFICE",param,"회의실 정보 조회")
+	.then((rows)=>{res.render(root + 'reserveList.ejs',{'param':param,'row' : rows});})
+	.catch((err)=>{console.log(err);res.send(false);});
 });
 
 

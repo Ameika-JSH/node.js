@@ -1,8 +1,16 @@
+<h1 class = 'center'>[<%=param.office %>] <%=param.room %> - (<%=param.date %>)</h1>
 <div id = 'timeTable'>
 	<div class='timeTableHead'>
+		<div class = 'colTime underbar'></div>
+		<% let office = row[0].OFFICE; for(let i = 0 ; i < (row.length) ; i++) { %>		
+		<div class = 'colStatus underbar'><%=row[i].OFFICE %></div>
+		<% } %>
+	</div>
+	<div class='timeTableHead'>
 		<div class = 'colTime'>시간</div>
-		<div class = 'colStatus'>회의실1</div>
-		<div class = 'colStatus'>회의실2</div>
+		<% for(let i = 0 ; i < (row.length) ; i++) { %>		
+		<div class = 'colStatus'><%=row[i].ROOM %></div>
+		<% } %>
 	</div>
 	<div class='timeTableBody'>
 		<div class = 'colTime'>
@@ -25,9 +33,10 @@
 			<div class = 'colTimeElement'>17</div>
 			<div class = 'colTimeElement'></div>
 		</div>
-		<div class = 'colStatus'>
+		<% for(let i = 0 ; i < (row.length) ; i++) { %>		
+		<div class = 'colStatus colOffice'>
 			<div class = 'colTimeElement reserved'><p>sdafdsafsafsafkjhasdfklhasdfkjhasdfkjhasdfkljasdhfkjlh</p></div>
-			<div class = 'colTimeElement reserved'>asd</div>
+			<div class = 'colTimeElement reserved'></div>
 			<div class = 'colTimeElement'></div>
 			<div class = 'colTimeElement'></div>
 			<div class = 'colTimeElement'></div>
@@ -45,26 +54,7 @@
 			<div class = 'colTimeElement'></div>
 			<div class = 'colTimeElement'></div>
 		</div>
-		<div class = 'colStatus'>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-		</div>
+		<% } %>
 	</div>
 </div>
 <span id = "spanHover" style="width:100px;height:100px;">마우스따라다니는 상자 테스트!</span>
