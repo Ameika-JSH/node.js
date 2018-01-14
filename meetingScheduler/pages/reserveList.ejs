@@ -1,4 +1,4 @@
-<h1 class = 'center'>[<%=param.office %>] <%=param.room %> - (<%=param.date %>)</h1>
+<h1 class = 'center'><%=param.date %></h1>
 <div id = 'timeTable'>
 	<div class='timeTableHead'>
 		<div class = 'colTime underbar'></div>
@@ -14,47 +14,61 @@
 	</div>
 	<div class='timeTableBody'>
 		<div class = 'colTime'>
-			<div class = 'colTimeElement'>9</div>
+			<% for(let i = 9 ; i < 18 ; i++){ %>
+			<div class = 'colTimeElement'><%=i %></div>
 			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>10</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>11</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>12</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>13</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>14</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>15</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>16</div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'>17</div>
-			<div class = 'colTimeElement'></div>
+			<% } %>
 		</div>
 		<% for(let i = 0 ; i < (row.length) ; i++) { %>		
-		<div class = 'colStatus colOffice'>
-			<div class = 'colTimeElement reserved'><p>sdafdsafsafsafkjhasdfklhasdfkjhasdfkjhasdfkljasdhfkjlh</p></div>
-			<div class = 'colTimeElement reserved'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement reserved'></div>
-			<div class = 'colTimeElement reserved'></div>
-			<div class = 'colTimeElement reserved'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
-			<div class = 'colTimeElement'></div>
+		<div class = 'colStatus colOffice' data-office = "<%=row[i].OFFICE %>" data-room = "<%=row[i].ROOM %>">
+			<% for(let i = 0 ; i < 9 ; i++){ %>
+			<div class = 'colTimeElement reserved' data-code = "<%=(i*2) %>" data-time = "<%=(i+9) %>:00"></div>
+			<div class = 'colTimeElement' data-code = "<%=(i*2)+1 %>" data-time = "<%=(i+9) %>:30"></div>
+			<% } %>
 		</div>
 		<% } %>
 	</div>
 </div>
 <span id = "spanHover" style="width:100px;height:100px;">마우스따라다니는 상자 테스트!</span>
+<div id = 'divHover'>
+	<h1></h1>
+	<div class='row inputDataDiv'>
+		<div class='col-lg-10 col-12'>
+			<div class = "row">
+				<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+				  <div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-sm">회의 주제</span>
+				  </div>
+				  <input type="text" id = "inputTitle" name = "회의 주제" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+				  <div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-sm">참석자</span>
+				  </div>
+				  <input type="text" id = "inputMember" name = "참석자" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+				  <div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-sm">시작시간</span>
+				  </div>
+				  <input type="time" id = "inputStart" name = "시작시간" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+				  <div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-sm">종료시간</span>
+				  </div>
+				  <input type="time" id = "inputEnd" name = "종료시간" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+				  <div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-sm">기타</span>
+				  </div> 
+				  <input type="text" id = "inputComment" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+		</div>
+		<div class='col-lg-2 col-12'>
+			<button class = "btn btn-sm btn-green" id = "btnRoomInsert"><i class="fa fa-save"></i></button>
+		</div>
+	</div>
+</div>

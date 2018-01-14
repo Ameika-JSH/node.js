@@ -175,8 +175,8 @@
 		{ 		
 			spinnerToggle();		
 			let data = {};
-			data.office = $("#divOffice .btn-outline-black").html();
-			data.room = $("#divRoom .btn-outline-black").html();
+			//data.office = $("#divOffice .btn-outline-black").html();
+			//data.room = $("#divRoom .btn-outline-black").html();
 			data.date = e.date.toLocaleDateString();
 			if(!Object.values(data).includes(undefined))
 			{
@@ -190,8 +190,15 @@
 						$("#divTime").html(result);
 						$(".colOffice div:not(.reserved)").click(function()
 						{
-							console.log(1);
+							data.office = $(this).parent().attr('data-office');
+							data.room = $(this).parent().attr('data-room');
+							data.start = $(this).attr('data-code');
+							data.time = $(this).attr('data-time');
+							console.log(data);
+							$("#divHover h1").html("[" + data.office + "]" + data.room + " (" + data.date + " - " + data.time + "~)");
+							$("#inputStart").val(data.time);
 						});
+						
 						$(".reserved").mouseenter(function()
 						{
 							$("#spanHover").html($(this).html()).css('display','block');

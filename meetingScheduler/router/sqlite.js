@@ -79,22 +79,45 @@ dbRun("CREATE TABLE IF NOT EXISTS ROOM_INFO " +
 		 "SIZE NUMBER," +
 		 "COMMENT TEXT," +
 		 "PRIMARY KEY(OFFICE,ROOM)" + 
-		 ")",undefined,"ROOM_INFO 이상무");
+		 ")",undefined,"ROOM_INFO 이상무")
+		 .catch((err)=>{console.log(err);});
 		 
 		 
 dbRun("CREATE TABLE IF NOT EXISTS EMP_INFO " + 
 		 "(" +
-		 "ID TEXT," + 
+		 "ID TEXT PRIMARY KEY," + 
 		 "PW TEXT," +
 		 "NAME TEXT," +
 		 "OFFICE TEXT," +
 		 "GRADE TEXT," +
-		 "PART TEXT," +
-		 "PRIMARY KEY(ID)" + 
-		 ")",undefined,"EMP_INFO 이상무");
+		 "PART TEXT" +
+		 ")",undefined,"EMP_INFO 이상무")
+		 .catch((err)=>{console.log(err);});
 		 
+dbRun("CREATE TABLE IF NOT EXISTS MEETING_LIST " + 
+	  "(" +
+	  "MEETING_NO INTEGER PRIMARY KEY AUTOINCREMENT," +
+	  "OFFICE TEXT," +
+	  "ROOM TEXT," +
+	  "MEETING_TITLE TEXT," + 
+	  "START_TIME DATETIME," + 
+	  "END_TIME DATETIME," +
+	  "START_CODE INTEGER," + 
+	  "END_CODE INTEGER," +
+	  "FOREIGN KEY(OFFICE,ROOM) REFERENCES ROOM_INFO(OFFICE,ROOM)" +
+	  ")",undefined,"MEETING_LIST 이상무")
+	  .catch((err)=>{console.log("MEETING_LIST : " + err);});
+	  
+dbRun("CREATE TABLE IF NOT EXISTS MEETING_MEMBER " + 
+	  "(" +
+	  "MEETING_NO INTEGER," +
+	  "ID TEXT," +
+	  "FOREIGN KEY(MEETING_NO) REFERENCES MEETING_LIST(MEETING_NO) " +
+	  ")",undefined,"MEETING_MEMBER 이상무")
+		.catch((err)=>{console.log("MEETING_MEMBER : " + err);});
+		 /*
 dbRun("SELECT * FROM ROOM_INFO",undefined,"ROOM_INFO 확인")
-.then((rows)=>{console.log(rows);});
+.then((rows)=>{console.log(rows);});*/
 
 
 exports.dbRun = dbRun;

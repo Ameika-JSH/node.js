@@ -23,8 +23,8 @@ router.post('/login', function (req, res) {
 	{
 		if(rows.length==1)
 		{
-			console.log('login success!!');
 			req.session.loginId=param.inputId;
+			console.log('login success!! : ' + req.session.loginId);
 			res.send(defaultPage); 
 		}
 		else res.send(false);
