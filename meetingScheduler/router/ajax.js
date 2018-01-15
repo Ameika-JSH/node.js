@@ -45,10 +45,32 @@ router.get('/timeTable/reserveList', function (req, res) {
 	let param = req.query;
 	console.log(param);
 	sqlite.dbRun("SELECT * FROM ROOM_INFO ORDER BY OFFICE",param,"회의실 정보 조회")
-	.then((rows)=>{res.render(root + 'reserveList.ejs',{'param':param,'row' : rows});})
+	.then((rows)=>
+	{
+		sqlite.dbRun("SELECT * " + 
+				     "FROM MEETING_LIST " + 
+					 "WHERE DATE=?date",param,"회의실 예약 조회")
+		.then((reserve)=>
+		{
+			res.render(root + 'reserveList.ejs',{'param':param,'row' : rows, 'reserve' : reserve});
+		});
+	})
 	.catch((err)=>{console.log(err);res.send(false);});
 });
 
+router.get('/timeTable/reserveCheck', function (req, res) {	
+	let param = req.query;
+	console.log(param);
+	sqlite.dbRun("SELECT * " + 
+				     "FROM MEETING_LIST " + 
+					 "WHERE OFFICE=?office " + 
+					 "AND ROOM=?room " + 
+					 "AND DATE=?date " + 
+					 "AND START_TIME>?start "+
+					 "ORDER BY START_TIME",param,"회의실 예약 조회")
+	.then((rows)=>{res.send({'param':param,'row' : rows});})
+	.catch((err)=>{console.log(err);res.send(false);});
+});
 
 /* Room Info */
 router.get('/roomInfo', function (req, res) {	

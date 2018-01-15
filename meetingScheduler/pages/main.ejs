@@ -21,8 +21,9 @@
     <link href="css/sweetalert.css" rel="stylesheet">
     <link href="css/font-awesome.css" rel="stylesheet">
 	
-    <% if (page == "timeTable") { %>
+	<% if (page == "timeTable") { %>
 	<link href="css/bootstrap-datepicker3.css" rel="stylesheet">
+	<link href="css/chosen.min.css" rel="stylesheet">	
 	<% } %>
   </head>
 
@@ -45,6 +46,7 @@
     <% if (page == "timeTable") { %>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/bootstrap-datepicker.kr.min.js"></script>
+	<script src="js/chosen.jquery.min.js"></script>
 	<script>
 	let datePicker = $('.timePicker').datepicker({
 		maxViewMode: 1,

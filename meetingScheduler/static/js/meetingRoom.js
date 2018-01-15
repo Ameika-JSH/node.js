@@ -3,6 +3,7 @@
 {
 	'use strict'	
 	const pageName = $("#pageName").val();
+	const SPINNER_ON = 100;
 	const SPINNER_OFF = -100;
 	
 	
@@ -194,10 +195,35 @@
 							data.room = $(this).parent().attr('data-room');
 							data.start = $(this).attr('data-code');
 							data.time = $(this).attr('data-time');
-							console.log(data);
-							$("#divHover h1").html("[" + data.office + "]" + data.room + " (" + data.date + " - " + data.time + "~)");
-							$("#inputStart").val(data.time);
+							console.log(data);							
+							$("#inputStart").val(data.start);
+							$("#divHover h1").html("[" + data.office + "]" + data.room + " (" + data.date + " - " + data.time + "~)");							
+							
+							spinnerToggle(SPINNER_ON);
+							$.ajax(
+							{
+								type : 'get',
+								url : 'ajax/timeTable/reserveCheck',
+								data : data,
+								success : function(checkData)
+								{
+									console.log(checkData);
+									$("#inputEnd").html(generateOptions(data.start));
+									spinnerToggle(SPINNER_OFF);
+								}
+							});
+							
+							$("#divHover").animate({height:'toggle'},function()
+							{
+								$("#divHover main").unbind().click(function()
+								{		
+									if(event.target.classList.value == 'container')
+										$("#divHover").animate({height:'toggle'});
+								});
+							});
 						});
+						
+						
 						
 						$(".reserved").mouseenter(function()
 						{
@@ -297,6 +323,19 @@
 				$(td).attr('data-old-value',oldValue).html(input);
 			}
 		});
+	}
+	
+	function generateOptions(start,end)
+	{
+		start = parseInt(start);
+		let rtnStr = '';
+		if(!end) end = 18;
+		for(start = start+1;start<=end;start++)
+		{
+			rtnStr += '<option value = "' + start + '">' + (parseInt(start/2)+9);
+			rtnStr += (start%2 == 0 ? ':00</option>' : ':30</option>');
+		}
+		return rtnStr;
 	}
 	
 	function doRoomUpdate()
