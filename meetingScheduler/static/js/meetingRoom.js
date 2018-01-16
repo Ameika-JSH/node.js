@@ -168,7 +168,7 @@
 			});			
 		}
 		spinnerToggle(SPINNER_OFF);
-	});	
+	});		
 	
 	if($("#pageName").val() == "timeTable")
 	{
@@ -193,10 +193,10 @@
 						{
 							data.office = $(this).parent().attr('data-office');
 							data.room = $(this).parent().attr('data-room');
-							data.start = $(this).attr('data-code');
+							data.startCd = $(this).attr('data-code');
 							data.time = $(this).attr('data-time');
 							console.log(data);							
-							$("#inputStart").val(data.start);
+							$("#inputStart").val(data.startCd);
 							$("#divHover h1").html("[" + data.office + "]" + data.room + " (" + data.date + " - " + data.time + "~)");							
 							
 							spinnerToggle(SPINNER_ON);
@@ -208,7 +208,8 @@
 								success : function(checkData)
 								{
 									console.log(checkData);
-									$("#inputEnd").html(generateOptions(data.start));
+									$("#inputEnd").html(generateOptions(data.startCd));
+									$("#inputMember").chosen({'no_results_text' : '검색 결과가 없습니다.'});
 									spinnerToggle(SPINNER_OFF);
 								}
 							});
@@ -223,11 +224,39 @@
 							});
 						});
 						
+						$("#btnRoomInsert").click(function()
+						{
+							let divHover = $(this).parents("#divHover");
+							data.title = divHover.find('#inputTitle').val();
+							data.startCd = divHover.find('#inputStart').val();
+							data.startTime = divHover.find('#inputStart option:selected').html();
+							data.endCd = divHover.find('#inputEnd').val();
+							data.endTime = divHover.find('#inputEnd option:selected').html();
+							let chosenLi = $("#inputMember_chosen .search-choice");							
+							data.member = [];
+							
+							for(let i = 0; i <chosenLi.length; i++)
+							{
+								let eq = chosenLi.eq(i).find('a').attr('data-option-array-index');
+								data.member.push($("#inputMember option").eq(eq).val());
+							}
+							console.log(data);
+							$.ajax(
+							{
+								type : 'post',
+								url : 'ajax/timeTable',
+								data : data,
+								success : function(result)
+								{
+									console.log(result);
+								}
+							});
+						});
 						
 						
 						$(".reserved").mouseenter(function()
 						{
-							$("#spanHover").html($(this).html()).css('display','block');
+							$("#spanHover").html($(this).attr('data-hover')).css('display','block');
 						});	
 						
 						$(".reserved").mousemove(function()

@@ -1,5 +1,23 @@
 <h1 class = 'center'><%=param.date %></h1>
-<h1><%=reserve %></h1>
+<% 
+function isReserved(_row,time)
+{
+	let rtnValue = false;
+	let j;
+	for(let i = 0; i <reserve.length && !rtnValue; i++)
+	{
+		rtnValue = _row.OFFICE == reserve[i].OFFICE &&
+				   _row.ROOM == reserve[i].ROOM &&
+				   (time >= reserve[i].START_CODE && time < reserve[i].END_CODE);
+		j = i;
+	}
+	if(rtnValue) rtnValue = {'MEETING_TITLE' : reserve[j].MEETING_TITLE, 'MEETING_NO' : reserve[j].MEETING_NO};
+	return rtnValue;
+}
+
+let mNo = [];
+let chk;
+%>
 <div id = 'timeTable'>
 	<div class='timeTableHead'>
 		<div class = 'colTime underbar'></div>
@@ -22,9 +40,9 @@
 		</div>
 		<% for(let i = 0 ; i < (row.length) ; i++) { %>		
 		<div class = 'colStatus colOffice' data-office = "<%=row[i].OFFICE %>" data-room = "<%=row[i].ROOM %>">
-			<% for(let i = 0 ; i < 9 ; i++){ %>
-			<div class = 'colTimeElement' data-code = "<%=(i*2) %>" data-time = "<%=(i+9) %>:00"></div>
-			<div class = 'colTimeElement' data-code = "<%=(i*2)+1 %>" data-time = "<%=(i+9) %>:30"></div>
+			<% for(let j = 0 ; j < 9 ; j++){ %>
+			<div class = 'colTimeElement<% chk = isReserved(row[i],(j*2)); if(chk){ %> reserved<% } %>' data-code = "<%=(j*2) %>" data-time = "<%=(j+9) %>:00" <% if(chk){ %>data-hover = '<%=chk.MEETING_TITLE %>'<% } %>><% if(!mNo.includes(chk.MEETING_NO)){ %><%=chk.MEETING_TITLE %><% mNo.push(chk.MEETING_NO);}%></div>
+			<div class = 'colTimeElement<% chk = isReserved(row[i],(j*2)+1); if(chk){ %> reserved<% } %>' data-code = "<%=(j*2)+1 %>" data-time = "<%=(j+9) %>:30" <% if(chk){ %>data-hover = '<%=chk.MEETING_TITLE %>'<% } %>><% if(!mNo.includes(chk.MEETING_NO)){ %><%=chk.MEETING_TITLE %><% mNo.push(chk.MEETING_NO);}%></div>
 			<% } %>
 		</div>
 		<% } %>
@@ -47,7 +65,7 @@
 					  <div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">시작시간</span>
 					  </div>
-					  <select id = "inputStart" name = "시작시간" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" multiple tabindex = '-1'>
+					  <select id = "inputStart" name = "시작시간" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
 					  <% for(let i = 0 ; i < 9 ; i++){ %>
 					  <option value = "<%=(i*2) %>"><%=(i+9) %>:00</option>
 					  <option value = "<%=(i*2)+1 %>"><%=(i+9) %>:30</option>
@@ -65,7 +83,11 @@
 					  <div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">참가자</span>
 					  </div> 
-					  <input type="text" id = "inputMember" name = '참가자' class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+					  <select data-placeholder="참가자 선택" id = "inputMember" name = '참가자' class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" multiple tabindex="-1">
+					  <% for(let i = 0; i < member.length; i++){ %>
+					  <option value='<%=member[i].ID %>'><%=member[i].NAME %>(<%=member[i].PART %>)</option>
+					  <% } %>					  
+					  </select>
 					</div>
 				</div>
 			</div>
