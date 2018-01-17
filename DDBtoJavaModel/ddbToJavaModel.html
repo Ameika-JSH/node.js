@@ -14,6 +14,7 @@
 		<p>기본값은 int 입니다.</p>
 		<input id = 'numType' placeholder="int,long,double">
 		<p>데이터베이스 키값은 분석하지 못합니다. 확인하시고 키값은 직접 수정 해 주세요.</p>
+		<input type='checkbox' id='ddb'>
 		<textarea id = 'ddbJson'></textarea>
 		<button onclick = 'start()' id = 'ddb'>변환 시작</button>
 		<div id = 'defaultRslt'></div>
@@ -101,8 +102,7 @@
 				{
 					objectLog.push({[key] : jsonData[1]});
 				}
-				
-				rtnStr += '@DynamoDBAttribute(attributeName = "' + key + '")\n';
+				if(document.getElementById('ddb').checked) rtnStr += '@DynamoDBAttribute(attributeName = "' + key + '")\n';
 				rtnStr += 'private ' + getJavaType(type,key) + ' ' + underBarToCamel(key,false) + ';\n\n';
 			});
 

@@ -8,6 +8,7 @@ $(document).ready(function(){
 	var baseballAnswer = null;
 	var trial = 0;
 	var msgClass = ['even','odd'];
+	
 	$("#baseballInput").focus().keydown(function()
 	{
 		baseballPlay(event,this);
