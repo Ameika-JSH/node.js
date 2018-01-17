@@ -8,6 +8,14 @@ const path = require('path');
 const root = path.join(path.dirname(__dirname), '/pages/');
 const defaultPage = "timeTable";
 
+router.get('*',function(req,res,next)
+{	
+	console.log('모든 유저 세션 체크 : ' + req.session.loginId);
+	if(!req.session.loginId) res.send("잘못된 접근입니다.");
+	else next();
+});
+
+
 /* Login*/
 
 router.post('/login', function (req, res) {		
@@ -23,8 +31,8 @@ router.post('/login', function (req, res) {
 	{
 		if(rows.length==1)
 		{
-			console.log('login success!!');
 			req.session.loginId=param.inputId;
+			console.log('login success!! : ' + req.session.loginId);
 			res.send(defaultPage); 
 		}
 		else res.send(false);
@@ -36,7 +44,7 @@ router.post('/login', function (req, res) {
 router.get('/timeTable/officeList', function (req, res) {	
 	let param = req.query;
 	console.log(param);
-	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
+	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office ORDER BY ROOM",param,"회의실 정보 조회")
 	.then((rows)=>{res.send(rows);})
 	.catch(()=>{res.send(false);});
 });
@@ -44,11 +52,46 @@ router.get('/timeTable/officeList', function (req, res) {
 router.get('/timeTable/reserveList', function (req, res) {	
 	let param = req.query;
 	console.log(param);
-	sqlite.dbRun("SELECT ROOM FROM ROOM_INFO WHERE OFFICE=?office",param,"회의실 정보 조회")
-	.then((rows)=>{res.render(root + 'test.ejs');})
-	.catch(()=>{res.send(false);});
+	sqlite.dbRun("SELECT * FROM ROOM_INFO ORDER BY OFFICE",param,"회의실 정보 조회")
+	.then((rows)=>
+	{
+		sqlite.dbRun("SELECT * " + 
+				     "FROM MEETING_LIST " + 
+					 "WHERE DATE=?date",param,"회의실 예약 조회")
+		.then((reserve)=>
+		{
+			sqlite.dbRun("SELECT * FROM EMP_INFO",undefined,"직원 조회")
+			.then((member)=>{
+			res.render(root + 'reserveList.ejs',{'param':param,'row' : rows, 'reserve' : reserve,'member':member});
+			});
+		});
+	})
+	.catch((err)=>{console.log(err);res.send(false);});
 });
 
+router.get('/timeTable/reserveCheck', function (req, res) {	
+	let param = req.query;
+	console.log(param);
+	sqlite.dbRun("SELECT * " + 
+				     "FROM MEETING_LIST " + 
+					 "WHERE OFFICE=?office " + 
+					 "AND ROOM=?room " + 
+					 "AND DATE=?date " + 
+					 "AND START_TIME>?startCd "+
+					 "ORDER BY START_TIME",param,"회의실 예약 조회")
+	.then((rows)=>{res.send({'param':param,'row' : rows});})
+	.catch((err)=>{console.log(err);res.send(false);});
+});
+
+router.post('/timeTable',function(req,res){
+	let param = req.body;
+	sqlite.dbRun("INSERT INTO MEETING_LIST " +
+				 "(OFFICE, ROOM, MEETING_TITLE, DATE, START_TIME, END_TIME, START_CODE, END_CODE) " + 
+			     "VALUES(?office, ?room, ?title, " +
+				 "?date, ?startTime, ?endTime, ?startCd, ?endCd )",param,"회의 정보 입력")
+	.then(()=>{res.send(true);})
+	.catch(()=>{res.send(false);})
+});
 
 /* Room Info */
 router.get('/roomInfo', function (req, res) {	

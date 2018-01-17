@@ -1,0 +1,99 @@
+<h1 class = 'center'><%=param.date %></h1>
+<% 
+function isReserved(_row,time)
+{
+	let rtnValue = false;
+	let j;
+	for(let i = 0; i <reserve.length && !rtnValue; i++)
+	{
+		rtnValue = _row.OFFICE == reserve[i].OFFICE &&
+				   _row.ROOM == reserve[i].ROOM &&
+				   (time >= reserve[i].START_CODE && time < reserve[i].END_CODE);
+		j = i;
+	}
+	if(rtnValue) rtnValue = {'MEETING_TITLE' : reserve[j].MEETING_TITLE, 'MEETING_NO' : reserve[j].MEETING_NO};
+	return rtnValue;
+}
+
+let mNo = [];
+let chk;
+%>
+<div id = 'timeTable'>
+	<div class='timeTableHead'>
+		<div class = 'colTime underbar'></div>
+		<% let office = row[0].OFFICE; for(let i = 0 ; i < (row.length) ; i++) { %>		
+		<div class = 'colStatus underbar'><%=row[i].OFFICE %></div>
+		<% } %>
+	</div>
+	<div class='timeTableHead'>
+		<div class = 'colTime'>시간</div>
+		<% for(let i = 0 ; i < (row.length) ; i++) { %>		
+		<div class = 'colStatus'><%=row[i].ROOM %></div>
+		<% } %>
+	</div>
+	<div class='timeTableBody'>
+		<div class = 'colTime'>
+			<% for(let i = 9 ; i < 18 ; i++){ %>
+			<div class = 'colTimeElement'><%=i %></div>
+			<div class = 'colTimeElement'></div>
+			<% } %>
+		</div>
+		<% for(let i = 0 ; i < (row.length) ; i++) { %>		
+		<div class = 'colStatus colOffice' data-office = "<%=row[i].OFFICE %>" data-room = "<%=row[i].ROOM %>">
+			<% for(let j = 0 ; j < 9 ; j++){ %>
+			<div class = 'colTimeElement<% chk = isReserved(row[i],(j*2)); if(chk){ %> reserved<% } %>' data-code = "<%=(j*2) %>" data-time = "<%=(j+9) %>:00" <% if(chk){ %>data-hover = '<%=chk.MEETING_TITLE %>'<% } %>><% if(!mNo.includes(chk.MEETING_NO)){ %><%=chk.MEETING_TITLE %><% mNo.push(chk.MEETING_NO);}%></div>
+			<div class = 'colTimeElement<% chk = isReserved(row[i],(j*2)+1); if(chk){ %> reserved<% } %>' data-code = "<%=(j*2)+1 %>" data-time = "<%=(j+9) %>:30" <% if(chk){ %>data-hover = '<%=chk.MEETING_TITLE %>'<% } %>><% if(!mNo.includes(chk.MEETING_NO)){ %><%=chk.MEETING_TITLE %><% mNo.push(chk.MEETING_NO);}%></div>
+			<% } %>
+		</div>
+		<% } %>
+	</div>
+</div>
+<span id = "spanHover" style="width:100px;height:100px;">마우스따라다니는 상자 테스트!</span>
+<div id = 'divHover'>
+    <main role="main" class="container">
+		<div class='row inputDataDiv'>
+			<h1></h1>
+			<div class='col-lg-10 col-12'>
+				<div class = "row">
+					<div class="input-group input-group-sm mb-3 col-12">
+					  <div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">회의 주제</span>
+					  </div>
+					  <input type="text" id = "inputTitle" name = "회의 주제" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+					</div>
+					<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+					  <div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">시작시간</span>
+					  </div>
+					  <select id = "inputStart" name = "시작시간" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+					  <% for(let i = 0 ; i < 9 ; i++){ %>
+					  <option value = "<%=(i*2) %>"><%=(i+9) %>:00</option>
+					  <option value = "<%=(i*2)+1 %>"><%=(i+9) %>:30</option>
+					  <% } %>
+					  </select>
+					</div>
+					<div class="input-group input-group-sm mb-3 col-lg-6 col-12">
+					  <div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">종료시간</span>
+					  </div>
+					  <select id = "inputEnd" name = "종료시간" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+					  </select>
+					</div>
+					<div class="input-group input-group-sm mb-3 col-12">
+					  <div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-sm">참가자</span>
+					  </div> 
+					  <select data-placeholder="참가자 선택" id = "inputMember" name = '참가자' class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" multiple tabindex="-1">
+					  <% for(let i = 0; i < member.length; i++){ %>
+					  <option value='<%=member[i].ID %>'><%=member[i].NAME %>(<%=member[i].PART %>)</option>
+					  <% } %>					  
+					  </select>
+					</div>
+				</div>
+			</div>
+			<div class='col-lg-2 col-12'>
+				<button class = "btn btn-sm btn-green" id = "btnRoomInsert"><i class="fa fa-save"></i></button>
+			</div>
+		</div>
+	</main>
+</div>

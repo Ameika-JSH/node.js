@@ -37,6 +37,10 @@ li.active
 	background-color : var(--red);
 }
 
+.center
+{
+	text-align : center;
+}
 
 /* Login Page*/
 
@@ -135,10 +139,10 @@ li.active
 
 .colTimeElement.reserved
 {
-	background-color:#AAAAAA;
+	background-color:#BBB;
 }
 
-.colTimeElement.reserved p
+.colTimeElement.reserved
 {
     position: relative;
     left: 0px;
@@ -149,6 +153,11 @@ li.active
     white-space: nowrap;
     vertical-align: middle;
     padding-top: 20px;
+}
+
+.underbar
+{
+	border-bottom : var(--border);
 }
 
 #spanHover
@@ -212,10 +221,11 @@ button.btn-outline-black:focus
 	height : 87.5%;
 }
 
-.timePicker,.roomPicker
+.roomPicker,.officePicker
 {
 	display : none;
 }
+
 #divTime
 {
 	margin : 50px 0px 0px 0px;
@@ -233,6 +243,34 @@ button.btn-outline-black:focus
 	width : 100%;
 }
 
+#divHover
+{
+	display : none;
+	background-color : #00000061;
+	position : fixed;
+	left :0;
+	top : 0;
+	width : 100%;
+	height : 100%;
+}
+
+#divHover main
+{
+	background-color : #00000000;
+	padding-top: 15%;
+}
+
+#divHover main .inputDataDiv
+{
+	background-color : #FFFFFF;
+    padding: 50px 0;
+    border-radius: 10px;
+    border: 3px solid #797979;;
+}
+#divHover main .inputDataDiv h1
+{
+	padding-left : 15px;
+}
 
 /* ROOM INFO Table*/
 .inputDataDiv
@@ -241,7 +279,7 @@ button.btn-outline-black:focus
 }
 @media (min-width: 992px){
 	
-	.inputDataDiv .input-group:nth-child(n+3)
+	.lastNoMargin .input-group:nth-child(n+3)
 	{
 		margin-bottom : 0 !important;
 	}

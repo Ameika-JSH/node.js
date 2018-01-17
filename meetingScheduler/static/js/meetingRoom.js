@@ -3,6 +3,7 @@
 {
 	'use strict'	
 	const pageName = $("#pageName").val();
+	const SPINNER_ON = 100;
 	const SPINNER_OFF = -100;
 	
 	
@@ -167,17 +168,16 @@
 			});			
 		}
 		spinnerToggle(SPINNER_OFF);
-	});	
+	});		
 	
-
 	if($("#pageName").val() == "timeTable")
 	{
 		datePicker.datepicker().on('changeDate',function(e)
 		{ 		
 			spinnerToggle();		
 			let data = {};
-			data.office = $("#divOffice .btn-outline-black").html();
-			data.room = $("#divRoom .btn-outline-black").html();
+			//data.office = $("#divOffice .btn-outline-black").html();
+			//data.room = $("#divRoom .btn-outline-black").html();
 			data.date = e.date.toLocaleDateString();
 			if(!Object.values(data).includes(undefined))
 			{
@@ -187,35 +187,76 @@
 					url : 'ajax/timeTable/reserveList',
 					data : data,
 					success : function(result)
-					{
-						console.log(result);
-						/*let timeHtml;
-						timeHtml = 
-								"<table align='center'>" +								
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" + 
-								"<tr><td>0</td><td><button class = 'btn btn-green'>9시</button></td></tr>" +
-								"</table>";*/
+					{					
 						$("#divTime").html(result);
+						$(".colOffice div:not(.reserved)").click(function()
+						{
+							data.office = $(this).parent().attr('data-office');
+							data.room = $(this).parent().attr('data-room');
+							data.startCd = $(this).attr('data-code');
+							data.time = $(this).attr('data-time');
+							console.log(data);							
+							$("#inputStart").val(data.startCd);
+							$("#divHover h1").html("[" + data.office + "]" + data.room + " (" + data.date + " - " + data.time + "~)");							
+							
+							spinnerToggle(SPINNER_ON);
+							$.ajax(
+							{
+								type : 'get',
+								url : 'ajax/timeTable/reserveCheck',
+								data : data,
+								success : function(checkData)
+								{
+									console.log(checkData);
+									$("#inputEnd").html(generateOptions(data.startCd));
+									$("#inputMember").chosen({'no_results_text' : '검색 결과가 없습니다.'});
+									spinnerToggle(SPINNER_OFF);
+								}
+							});
+							
+							$("#divHover").animate({height:'toggle'},function()
+							{
+								$("#divHover main").unbind().click(function()
+								{		
+									if(event.target.classList.value == 'container')
+										$("#divHover").animate({height:'toggle'});
+								});
+							});
+						});
+						
+						$("#btnRoomInsert").click(function()
+						{
+							let divHover = $(this).parents("#divHover");
+							data.title = divHover.find('#inputTitle').val();
+							data.startCd = divHover.find('#inputStart').val();
+							data.startTime = divHover.find('#inputStart option:selected').html();
+							data.endCd = divHover.find('#inputEnd').val();
+							data.endTime = divHover.find('#inputEnd option:selected').html();
+							let chosenLi = $("#inputMember_chosen .search-choice");							
+							data.member = [];
+							
+							for(let i = 0; i <chosenLi.length; i++)
+							{
+								let eq = chosenLi.eq(i).find('a').attr('data-option-array-index');
+								data.member.push($("#inputMember option").eq(eq).val());
+							}
+							console.log(data);
+							$.ajax(
+							{
+								type : 'post',
+								url : 'ajax/timeTable',
+								data : data,
+								success : function(result)
+								{
+									console.log(result);
+								}
+							});
+						});
+						
+						
 						$(".reserved").mouseenter(function()
 						{
-							console.log(event);
-							$("#spanHover").css('display','block');
+							$("#spanHover").html($(this).attr('data-hover')).css('display','block');
 						});	
 						
 						$(".reserved").mousemove(function()
@@ -227,7 +268,6 @@
 						
 						$(".reserved").mouseout(function()
 						{
-							console.log(event);
 							$("#spanHover").css('display','none');
 						});
 						spinnerToggle();
@@ -314,6 +354,19 @@
 		});
 	}
 	
+	function generateOptions(start,end)
+	{
+		start = parseInt(start);
+		let rtnStr = '';
+		if(!end) end = 18;
+		for(start = start+1;start<=end;start++)
+		{
+			rtnStr += '<option value = "' + start + '">' + (parseInt(start/2)+9);
+			rtnStr += (start%2 == 0 ? ':00</option>' : ':30</option>');
+		}
+		return rtnStr;
+	}
+	
 	function doRoomUpdate()
 	{
 		spinnerToggle();
@@ -360,7 +413,6 @@
 		function(input)
 		{
 			if(input) $(selector).val(input);
-			resolve(input);
 		});	
 	}
 	

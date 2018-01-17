@@ -24,40 +24,49 @@ router.get('/',function(req,res)
 	else res.render(root + 'main.ejs',{page:"login"});	
 });
 
-router.get('*',function(req,res,next)
-{	
-	console.log('모든 유저 세션 체크 : ' + req.session.loginId);
-	if(!req.session.loginId) res.redirect("/");
-	else next();
-});
-
 router.get('/timeTable',function(req,res)
 {
-	sqlite.dbRun("SELECT DISTINCT OFFICE FROM ROOM_INFO",undefined,"회의실 정보 조회")
-	.then((rows)=>
-	{		
-		console.log(rows);
-		res.render(root + 'main.ejs', { page : "timeTable", data : rows});
-	});	
+	if(sessionCheck(req,res))
+	{
+		sqlite.dbRun("SELECT DISTINCT OFFICE FROM ROOM_INFO",undefined,"회의실 정보 조회")
+		.then((rows)=>
+		{		
+			console.log(rows);
+			res.render(root + 'main.ejs', { page : "timeTable", data : rows});
+		});	
+	}
 });
 
 router.get('/roomMng',function(req,res)
 {
-	sqlite.dbRun("SELECT * FROM ROOM_INFO ORDER BY OFFICE",undefined,"회의실 정보 조회")
-	.then((rows)=>
-	{		
-		console.log(rows);
-		res.render(root + 'main.ejs', { page : "roomMng", data : rows});
-	});	
+	if(sessionCheck(req,res))
+	{
+		sqlite.dbRun("SELECT * FROM ROOM_INFO ORDER BY OFFICE",undefined,"회의실 정보 조회")
+		.then((rows)=>
+		{		
+			console.log(rows);
+			res.render(root + 'main.ejs', { page : "roomMng", data : rows});
+		});	
+	}
 });
 router.get('/:pageName',function(req,res)
 {
-    const pageName = req.params.pageName;
-    if (fs.existsSync(root + pageName + '.ejs') && pageList.includes(pageName))
+	if (fs.existsSync(root + pageName + '.ejs') && pageList.includes(pageName))
         res.render(root + 'main.ejs', { page : pageName });
 	else
 		res.send('잘못된 접근 입니다.');
 });
+
+function sessionCheck(req,res)
+{
+	const pageName = req.params.pageName;	
+	if(!req.session.loginId) 
+	{
+		res.redirect("/");	
+		return false;
+	}
+	else return true;
+}
 console.log(sqlite);
 
 console.log('Page router Start ');
