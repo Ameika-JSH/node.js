@@ -151,9 +151,9 @@
 		
 		function getJavaType(type,key)
 		{
-			
-			if(type == 'L') return 'List<' + underBarToCamel(key,true) + '>';
-			else if(type == 'L') return underBarToCamel(key,true);
+			let result = underBarToCamel(key,true);
+			if(type == 'L') return 'List<' + result.replace(result[0],result[0].toUpperCase()) + '>';
+			else if(type == 'L') return result;
 			else if(ddbJavaTypes[type]) return ddbJavaTypes[type];
 			else return '\/\/적절한 타입을 찾지 못했습니다.\nObject';
 		}
@@ -167,7 +167,8 @@
 			
 		function underBarToCamel(key,isModelName)
 		{
-			return key.toLowerCase().replace(/_([a-z])/g,(reg,capture,indx,input)=>{return capture.toUpperCase();});
+			if(!key.includes('_')) return key;
+			else return key.toLowerCase().replace(/_([a-z])/g,(reg,capture,indx,input)=>{return capture.toUpperCase();});
 		}
 
 		function getKeyValueArray(json)
