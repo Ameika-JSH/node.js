@@ -72,7 +72,7 @@
 					
 					let varibaleType = lineArray[3];
 					if(varibaleType.endsWith('char(1)')) varibaleType = 'char';
-					else varibaleType = sqlJavaTypes[varibaleType.split('(')[0]];
+					else varibaleType = sqlJavaTypes[varibaleType.split('(')[0]] ? sqlJavaTypes[varibaleType.split('(')[0]] : varibaleType;
 					
 					let commnetKey = 'COMMENT';
 					let variableComment = lineArray.includes(commnetKey) 
