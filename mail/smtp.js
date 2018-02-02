@@ -1,5 +1,5 @@
 /*smtp*/
-
+/*
 const fs = require("fs");
 const SMTPServer = require('smtp-server').SMTPServer;
 const server = new SMTPServer({
@@ -50,11 +50,11 @@ const server = new SMTPServer({
 	socketTimeout : 1000*60*60,
 	closeTimeout  : 1000*60*60
 });
-server.listen(8080,'localhost');
+server.listen(25,'localhost');
+*/
 
 
 
-/*
 var simplesmtp = require("simplesmtp"),
     fs = require("fs");
 
@@ -81,4 +81,4 @@ smtp.on("dataReady", function(connection, callback){
     console.log("Incoming message saved to message.txt");
     callback(null, "ABC1"); // ABC1 is the queue id to be advertised to the client
     // callback(new Error("Rejected as spam!")); // reported back to the client
-});*/
+});

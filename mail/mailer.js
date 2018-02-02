@@ -1,13 +1,99 @@
+'use strict'/*
+const local = '127.0.0.1';
+const lotte = 'ews.lotte.net';
 
+var Telnet = require('telnet-client')
+var connection = new Telnet()
+
+ 
+var params = {
+  host: local,
+  port: '25',
+  timeout: 60000,
+  debug:true
+  // removeEcho: 4
+}
+
+
+connection.on('ready', function(...p) {
+	console.log('ready :',p);
+	connection.send('HELO ldcc',(err,res)=>
+	{
+		console.log('HELO done');
+		consoleER('HELO',err,res);	
+		connection.send('MAIL TO:ameika@lotte.net',(err,res)=>
+		{
+			console.log('MAIL TO done:');
+			consoleER('MAIL TO',err,res);
+		});			
+		console.log('MAIL TO code end');
+	});
+	console.log('HELO code end');
+});
+connection.on('connect', function() {
+	console.log('connect :');	
+});
+ 
+ function consoleER(cmd,err,res)
+ {
+	 console.log('cmd :',cmd);
+	 console.log('err:',err);
+	 console.log('res:',res);
+ }
+ 
+ function mailTo(cnt)
+ {
+	 connection.exec('MAIL TO:ameika@lotte.net',(err,res)=>
+	{
+		console.log('MAIL TO('+ cnt +') done:');
+		consoleER(err,res);
+		if(err) mailTo(cnt+1);
+	});
+ }
+ 
+connection.on('writedone', function(...p) {
+	console.log('writedone :',p);
+});
+connection.on('data', function(stream) {
+	console.log('data :');
+});
+connection.on('failedlogin', function(...p) {
+	console.log('failedlogin :',p);
+});
+connection.on('error', function(...p) {
+	console.log('error :',p);
+});
+ 
+connection.on('timeout', function(...p) {
+	console.log('socket timeout!',p);  
+});
+connection.on('failedlogin', function(...p) {
+	console.log('socket failedlogin!',p);  
+});
+ 
+connection.on('end', function(...p) {
+	console.log('socket end!',p);  
+});
+ 
+connection.on('close', function(...p) {
+  console.log('connection closed',p)
+})
+ 
+connection.connect(params);
+console.log('end of code');/
 
 /*mailer*/
 const testMail = 'ameika@lotte.net';
 const nodemailer = require('nodemailer');
 
 let smtpConfig = {
-    host: 'localhost',
+    host: 'ews.lotte.net',
     port: 25,
-    secure: false, // upgrade later with STARTTLS
+	secure:false,
+    tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+    }
 };
 
 let message = {
@@ -33,9 +119,12 @@ let transporter = nodemailer.createTransport(smtpConfig);
 
 transporter.sendMail(message,(err,info,eee)=>
 {
-	if(err) console.log('err :',err);
+	if(err) console.log('err :',JSON.stringify(err,null,2),err);
 	else console.log('info :',info);
 });
+
+
+
 
 /*
 const SMTPConnection = require('nodemailer/lib/smtp-connection');
