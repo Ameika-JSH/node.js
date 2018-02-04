@@ -2,6 +2,9 @@ const EWS = require('node-ews');
  
 // exchange server connection info
 const ewsConfig = {
+  username: 
+  password: 
+  host: 
 };
  
 // initialize node-ews
