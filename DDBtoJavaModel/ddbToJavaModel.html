@@ -167,7 +167,7 @@
 			
 		function underBarToCamel(key,isModelName)
 		{
-			if(!key.includes('_')) return key;
+			if(!key.includes('_') && key.toUpperCase() != key) return key;
 			else return key.toLowerCase().replace(/_([a-z])/g,(reg,capture,indx,input)=>{return capture.toUpperCase();});
 		}
 
