@@ -28,3 +28,22 @@ img
 	margin-right : 10px;
 	border-radius : 10px;
 }
+
+.row
+{
+	margin-top : 16px;
+}
+
+.nameText
+{
+	color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+	padding : 5px 10px;
+	border-radius : 4px;
+}
+
+.plusButton
+{
+	
+}
