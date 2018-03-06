@@ -1,9 +1,36 @@
 (function()
 {
-	document.cookie = 'init=9ra_tv';	
-	if(!getData('names')) resetCharacter();
-	var targets = getData('names').split(',');
-	console.log(targets);
+	var targets;
+	function init()
+	{
+		
+		document.cookie = 'init=9ra_tv';	
+		if(!getData('names')) resetCharacter();
+		targets = getData('names').split(',');
+
+		var htmlStr = '<div class="col-sm-4">' + 
+					  '<div class = "nameText">' +
+					  '<p>테스트(<num>0</num>)</p>' +
+					  '<button class = "btn btn-danger calcButton" data-calc = "-1" type = "button">-</button>' +
+					  '<button class = "btn btn-danger calcButton" data-calc = "1" type = "button">+</button>' +
+					  '</div>' +
+				      '</div>';
+					  
+		for(let i = 0; i < targets.length; i++)
+		{
+			var obj = $(htmlStr);
+			obj.find('p').html(targets[i] + '(<num>0</num>)');
+			$('#voteBoard').append(obj);
+		}
+		$('[data-calc]').click(function()
+		{
+			let val = $(this).data().calc;
+			$(this).parents('.nameText').find('num').html(parseInt($(this).parents('.nameText').find('num').html()) + val);
+		});
+	
+	}
+	
+	
 	
 	
 	$("#resetButton").click(function()
@@ -30,7 +57,8 @@
 		{
 			if(confirm)
 			{
-				console.log('do something');
+				 resetCharacter();				 
+				targets = getData('names').split(',');
 			}				
 		});		
 	});
@@ -71,5 +99,5 @@
 	{
 		setData('names',names.join(','));
 	}
-	
+	init();
 })();

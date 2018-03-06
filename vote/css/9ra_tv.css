@@ -38,12 +38,21 @@ img
 {
 	color: #fff;
     background-color: #007bff;
-    border-color: #007bff;
-	padding : 5px 10px;
+    border-color: #AAA;
 	border-radius : 4px;
+	margin-bottom : 1em;
+	height : 3em;
+	padding : 0.25em 0em 1em 1em;
 }
 
-.plusButton
+.nameText p
 {
-	
+	display : inline-block;
+	padding-top : 0.45em;
+}
+
+.calcButton
+{
+	float : right;
+	margin-right : 0.5em;
 }
