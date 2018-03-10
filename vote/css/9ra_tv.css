@@ -51,6 +51,16 @@ img
 	padding-top : 0.45em;
 }
 
+.nameText input
+{
+	float : right;
+	width : 3em;
+	margin-right : 0.5em;
+	margin-top : 0.3em;
+	border-radius : 5px;
+	text-align : center;
+}
+
 .calcButton
 {
 	float : right;

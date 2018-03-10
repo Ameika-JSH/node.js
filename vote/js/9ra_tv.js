@@ -1,27 +1,31 @@
 (function()
 {
 	var targets;
+	var defaultCount;
 	function init()
 	{
 		
 		document.cookie = 'init=9ra_tv';	
 		if(!getData('names')) resetCharacter();
 		targets = getData('names').split(',');
-
+		defaultCount = getData('defaultCount');
+		
 		var htmlStr = '<div class="col-sm-4">' + 
 					  '<div class = "nameText">' +
-					  '<p>테스트(<num>0</num>)</p>' +
+					  '<p>테스트</p>' +					  
 					  '<button class = "btn btn-danger calcButton" data-calc = "-1" type = "button">-</button>' +
 					  '<button class = "btn btn-danger calcButton" data-calc = "1" type = "button">+</button>' +
+					  '<input>' +
 					  '</div>' +
 				      '</div>';
 					  
 		for(let i = 0; i < targets.length; i++)
 		{
 			var obj = $(htmlStr);
-			obj.find('p').html(targets[i] + '(<num>0</num>)');
-			$('#voteBoard').append(obj);
+			obj.find('p').html(targets[i]);
+			$('#voteBoard').append(obj);			
 		}
+		$('#voteBoard').find('input').val(0);
 		$('[data-calc]').click(function()
 		{
 			let val = $(this).data().calc;
@@ -57,7 +61,7 @@
 		{
 			if(confirm)
 			{
-				 resetCharacter();				 
+				resetCharacter();				 
 				targets = getData('names').split(',');
 			}				
 		});		
@@ -97,7 +101,10 @@
 	
 	function resetCharacter()
 	{
+		$("#voteBoard").html('');
 		setData('names',names.join(','));
+		setData('defaultCount',defaultCount);
+		init();
 	}
 	init();
 })();
