@@ -14,17 +14,18 @@
 				<h1 class = 'vote-title'><img src = '9ra_tv.jpg'>9트코인</h1>
 			</div>
 			<div class = 'input-group'>
-				<input type = 'text' class = 'form-control'>
+				<input autocomplete = "character-name" id = "addInput" type = 'text' class = 'form-control'>
 				<span class="input-group-btn">
-					<button class = 'btn btn-success' type = 'button'>추가</button>					
+					<button id = "addButton" class = 'btn btn-success' type = 'button'>추가</button>					
 					<button id = 'resetButton' class = 'btn btn-danger' type = 'button'>리셋</button>
-					<button class = 'btn btn-warning' type = 'button'>추첨시작</button>
-					<button class = 'btn btn-info' type = 'button'>확률보기</button>
+					<button id = "selectionButton" class = 'btn btn-warning' type = 'button'>추첨시작</button>
+					<button id = "rateButton" class = 'btn btn-info' type = 'button'>확률보기</button>
 				</span>
 			</div>
 			<div id = 'voteBoard' class = 'row'>
 			</div>
 		</main>
+		<footer><p>Made by Ameika</p></footer>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>		
 		<script src="js/sweetalert.min.js"></script>  		

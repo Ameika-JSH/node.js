@@ -19,6 +19,7 @@ main
 	border-radius : 10px;
 	height : 100%;
 	padding : 10px 0px;
+	margin-bottom : 5em;
 }
 
 img
@@ -37,7 +38,7 @@ img
 .nameText
 {
 	color: #fff;
-    background-color: #007bff;
+    background-color: #5aaaff;
     border-color: #AAA;
 	border-radius : 4px;
 	margin-bottom : 1em;
@@ -65,4 +66,27 @@ img
 {
 	float : right;
 	margin-right : 0.5em;
+}
+
+.swal-text
+{
+	font-weight : bold;
+}
+
+footer
+{
+	position : fixed;
+	bottom : 0px;
+	left : 0px;
+	height : 3em;
+	width : 100%;
+	background-color : #ffebe9;
+}
+
+footer p
+{
+	font-weight : bold;
+	margin-top : 1em;
+	text-align : right;
+	padding-right : 10em;
 }
