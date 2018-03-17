@@ -1,3 +1,16 @@
+@keyframes spin {
+	from 
+	{
+		transform: rotate(0turn);
+	}
+	to 
+	{
+		transform: rotate(1turn);
+	}
+
+ } 
+
+
 .vote-title
 {
 	margin-top : 25px;
@@ -89,4 +102,25 @@ footer p
 	margin-top : 1em;
 	text-align : right;
 	padding-right : 10em;
+}
+
+[data-notify=title]
+{
+	font-weight : bold;	
+	font-size : 1.3em;
+}
+
+[data-notify=message]
+{
+	font-size : 1em;
+}
+
+.alert
+{
+	width : 20%;
+}
+
+.rolling
+{
+	animation: spin 0.5s infinite linear;
 }
