@@ -42,7 +42,8 @@ var names =
 '마스터레이븐',
 '미겔',
 '쿠마',
-'에디'
+'에디',
+'랜덤'
 ]
 
 /* 리셋시 기본셋팅되는 갯수입니다. */
@@ -53,3 +54,23 @@ var defaultCount = 0;
  * 다른 문자로 하고싶으시면 아래 값을 변경 해 주세요.
  */
  var piv = ':';
+ 
+ /* 시청자가 채팅으로 0인거 1로 할 수 있게 할지(1개제한) -  사용 = true , 사용안함 = false*/
+ var useViewerAdd = true;
+ /* 시청자가 채팅으로 새로운 항목 추가하게 할지 */ 
+ var useViewerCreate = false;
+ /* 시청자가 채팅으로 새로운 항목 추가할때 제한시간 (분단위)*/
+ var viewerCreateCooltime = 5;
+ /* 시청자가 채팅으로 추가할때 사용할 명령어 */
+ var commandViewerAdd = '!추가';
+ 
+ 
+ /* 채팅에 반응해서 메세지 보내는 시간 제한 (초단위) */
+ var sendLimitSeconds = 30;
+ 
+ /* 시청자가 채팅으로 순위 볼수 있게 할지 말지 */
+ var useViewerGetRank = true; 
+ /* 시청자가 채팅으로 순위 볼때 사용할 명령어 */
+ var commandViewerGetRank = '!확률';
+ /* 시청자가 순위 볼때 보여줄 갯수 ( ex : 3 => 1등2등3등)*/
+ var limitViewerGetRank = 3;

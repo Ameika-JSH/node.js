@@ -2,6 +2,8 @@
 {
 	var targets;
 	var voteData = {};
+	var createLimit = {};
+	var sendLimit;
 	function init()
 	{
 		
@@ -32,7 +34,12 @@
 			var name = $(input).siblings('p').text();		
 			$(input).val(voteData[name] ? voteData[name] : defaultCount).change(voteChange);			
 		});
-		$('[data-calc]').click(clickCalcBtn);	
+		$('[data-calc]').click(clickCalcBtn);
+		$("#addInput").autocomplete(
+		{
+			source:targets,
+			focus: function(event, ui) {return false;}
+		});		
 	}
 	
 	
@@ -51,20 +58,18 @@
 	
 	$("#addButton").click(function()
 	{
-		doAdd().chnage();
+		doAdd($("#addInput").val()).chnage();
 	});
 	$("#addInput").keyup(function(e)
 	{
-		if(e.keyCode == 13) doAdd().change();
+		if(e.keyCode == 13) doAdd($("#addInput").val()).change();
 	});
 	
-	function doAdd()
+	function doAdd(str)
 	{		
-		var str = $("#addInput").val();
 		var chk = true;
 		var count = false;
 		var rtn;
-		
 		if(str.includes(piv))
 		{
 			count = parseInt(str.split(piv)[1]);
@@ -212,13 +217,25 @@
 	}
 	
 	$("#rateButton").click(function()
-	{
+	{	
+		var list = getRate();
 		var str = '';
+		for(var i = 0; i < list.length; i++)			
+		{
+			var key = Object.keys(list[i])[0];
+			str += key + ' : ' + list[i][key] + '%\n';
+		}
+		swal(str);
+	});
+	
+	function getRate()
+	{
 		var base = 0;
 		var list = [];
 		$(".nameText").each(function(idx,div)
 		{
-			base += parseInt($(div).find('input').val());
+			var tmp = parseInt($(div).find('input').val());
+			base += tmp > 0 ? tmp : 0;
 		});
 		
 		$(".nameText").each(function(idx,div)
@@ -227,14 +244,8 @@
 			if(rate > 0) list.push({[$(div).find('p').html()] : rate.toFixed(2)});			
 		});
 		list = sort(list);
-		list.forEach(function(data)
-		{
-			var key = Object.keys(data)[0];
-			str += key + ' : ' + data[key] + '%\n';
-		});
-		
-		swal(str);
-	});
+		return list;
+	}
 	
 	function sort(list)
 	{
@@ -312,5 +323,92 @@
 		init();
 	}
 	
+	function parseChat()
+	{		
+		var irc = 'wss://irc-ws.chat.twitch.tv/';
+		var socket = new WebSocket(irc);
+		socket.onopen = function()
+		{	
+			$(".vote-title").css('background-color','#2dcaca');
+			socket.send('CAP REQ :twitch.tv/tags twitch.tv/commands twitch.tv/membership');
+			socket.send('PASS oauth:z6vn9mp8qv6lrdaiz5pktxn8hzbmwd');
+			socket.send('NICK 9ra_vote');
+			socket.send('JOIN #9ra5646');
+			setInterval(function(){socket.send('');},20000);
+		};
+
+		socket.onclose = function(data){$(".vote-title").css('background-color','#ff6868');}
+		socket.onerror = function(data){console.log('error..',data);}
+		socket.onmessage = function(data)
+		{
+			var rcv = {};
+			data.data.split(';').map(function(str)
+			{
+				var tmp = str.split('=');
+				rcv[tmp[0]] = tmp[1];
+			});
+						
+			if(rcv['user-type'])
+			{
+				var userType = rcv['user-type'].split('#9ra5646 :')[1];
+				var displayName = rcv['display-name']
+				
+				if(userType)
+				{
+					if(userType.startsWith('!영어'))
+						socket.send('PRIVMSG #9ra5646 :드럽게 못하죠?');
+					else if(userType.startsWith('!구라식영어'))
+					{
+						let sam = ['shitty game = 시프트 게임','채팅창에 영어 보인다 = 일단 헬로','ping_9 = 핑구나인','ameika = 아메리카']
+						let idx = Date.now()%sam.length
+						socket.send('PRIVMSG #9ra5646 :' + sam[idx]);
+					}else if(userType.startsWith('!제목'))
+					{
+						socket.send('PRIVMSG #9ra5646 :고우키 노랑단 방송');
+					}else if(userType.startsWith('!철갤'))
+					{
+					socket.send('PRIVMSG #9ra5646 :제 알바입니다.	');}
+					if(userType.startsWith('!컷킥'))
+					{
+					socket.send('PRIVMSG #9ra5646 :빨강단도 컷킥만으로 이길수 있다.');}
+					/*
+					if(useViewerAdd &&  userType.startsWith(commandViewerAdd + ' ')) 
+					{	
+						var tmp = userType.split(commandViewerAdd + ' ')[1].replace(/(\r\n|\n|\r)/gm, "");							
+						if((!voteData[tmp] || voteData[tmp] == 0))
+						{
+							if(targets.includes(tmp))
+								doAdd(tmp).change();
+							else if(useViewerCreate &&
+										(!createLimit[displayName] || 
+										 (new Date()) - createLimit[displayName] > 1000*60*viewerCreateCooltime))
+							{
+								doAdd(tmp).change();
+								createLimit[displayName] = new Date();
+							}
+						}
+					}
+					else if(!sendLimit || new Date() - sendLimit > 1000*sendLimitSeconds)
+					{						
+						if(useViewerGetRank && userType.startsWith(commandViewerGetRank))
+						{	
+							var str = '';
+							var list = getRate();
+							for(var i = 0; i < list.length && i < limitViewerGetRank; i++)			
+							{
+								var key = Object.keys(list[i])[0];
+								if(i != 0) str += ', ';
+								str += key + ' : ' + list[i][key] + '%';
+							}
+							socket.send('PRIVMSG #9ra5646 :' + str);
+							sendLimit = new Date();
+						}
+					}*/
+				}
+			}
+		}
+	}
+	
 	init();
+	parseChat();
 })();
