@@ -43,6 +43,7 @@ var names =
 '미겔',
 '쿠마',
 '에디',
+'녹티스',
 '랜덤'
 ]
 
@@ -63,10 +64,11 @@ var defaultCount = 0;
  var viewerCreateCooltime = 5;
  /* 시청자가 채팅으로 추가할때 사용할 명령어 */
  var commandViewerAdd = '!추가';
- 
+ /* 시청자 기존항목 0->1 시간제한(초단위)*/
+ var viewerAddCooltime = 60*60;
  
  /* 채팅에 반응해서 메세지 보내는 시간 제한 (초단위) */
- var sendLimitSeconds = 30;
+ var sendLimitSeconds = 10;
  
  /* 시청자가 채팅으로 순위 볼수 있게 할지 말지 */
  var useViewerGetRank = true; 

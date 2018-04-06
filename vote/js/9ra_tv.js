@@ -3,6 +3,7 @@
 	var targets;
 	var voteData = {};
 	var createLimit = {};
+	var addLimit = {};
 	var sendLimit;
 	function init()
 	{
@@ -355,7 +356,7 @@
 				
 				if(userType)
 				{
-					if(userType.startsWith('!영어'))
+					/*if(userType.startsWith('!영어'))
 						socket.send('PRIVMSG #9ra5646 :드럽게 못하죠?');
 					else if(userType.startsWith('!구라식영어'))
 					{
@@ -370,15 +371,20 @@
 					socket.send('PRIVMSG #9ra5646 :제 알바입니다.	');}
 					if(userType.startsWith('!컷킥'))
 					{
-					socket.send('PRIVMSG #9ra5646 :빨강단도 컷킥만으로 이길수 있다.');}
-					/*
+						socket.send('PRIVMSG #9ra5646 :빨강단도 컷킥만으로 이길수 있다.');
+					}*/
+					
 					if(useViewerAdd &&  userType.startsWith(commandViewerAdd + ' ')) 
 					{	
 						var tmp = userType.split(commandViewerAdd + ' ')[1].replace(/(\r\n|\n|\r)/gm, "");							
 						if((!voteData[tmp] || voteData[tmp] == 0))
 						{
-							if(targets.includes(tmp))
+							if(targets.includes(tmp) &&
+							 (!addLimit[displayName] || (new Date() - addLimit[displayName]) > viewerAddCooltime * 1000))
+							{
 								doAdd(tmp).change();
+								addLimit[displayName] = new Date();
+							}
 							else if(useViewerCreate &&
 										(!createLimit[displayName] || 
 										 (new Date()) - createLimit[displayName] > 1000*60*viewerCreateCooltime))
@@ -403,7 +409,7 @@
 							socket.send('PRIVMSG #9ra5646 :' + str);
 							sendLimit = new Date();
 						}
-					}*/
+					}
 				}
 			}
 		}

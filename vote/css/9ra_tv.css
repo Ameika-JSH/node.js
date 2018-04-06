@@ -124,3 +124,9 @@ footer p
 {
 	animation: spin 0.5s infinite linear;
 }
+
+#chartdiv
+{
+	height : 200px;
+	width : 800px;
+}
