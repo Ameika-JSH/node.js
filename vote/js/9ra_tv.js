@@ -5,6 +5,8 @@
 	var createLimit = {};
 	var addLimit = {};
 	var sendLimit;
+	var colors = ["#FF0F00","#FF6600","#FF9E01","#FCD202","#F8FF01","#B0DE09","#04D215","#0D8ECF","#0D52D1","#2A0CD0","#8A0CCF","#CD0D74"]
+	
 	function init()
 	{
 		
@@ -221,12 +223,52 @@
 	{	
 		var list = getRate();
 		var str = '';
+		var dataProvider = [];
+		
+		var hUnit = 25;
+		var height = 50;
 		for(var i = 0; i < list.length; i++)			
 		{
 			var key = Object.keys(list[i])[0];
 			str += key + ' : ' + list[i][key] + '%\n';
+			dataProvider.push({name : key, count : list[i][key],color : colors[i%colors.length]});
+			height += hUnit;
 		}
 		swal(str);
+
+		$(".swal-text").attr('id','chartdiv').css('height',height + 'px');
+		var chart = AmCharts.makeChart("chartdiv", {
+		  "type": "serial",
+		  "theme": "none",
+		  "marginRight": 70,
+		  "dataProvider": dataProvider,
+		  "valueAxes": [{
+				"unit" : "%",
+				"position": "top",
+				"title": "확률"
+			}],	
+		  "startDuration": 1,
+		  "graphs": [{
+			"balloonText": "<b>[[category]]: [[value]]</b>",
+			"fillColorsField": "color",
+			"fillAlphas": 0.9,
+			"lineAlpha": 0.1,
+			"type": "column",
+			"valueField": "count"
+		  }],
+		  "chartCursor": {
+			"categoryBalloonEnabled": false,
+			"cursorAlpha": 0.5,
+			"zoomable": true
+		  },
+		  "categoryField": "name",
+		  "rotate" : true,
+		  "export": {
+			"enabled": false
+		  }
+
+		});
+		$('[title="JavaScript charts"]').remove();
 	});
 	
 	function getRate()
