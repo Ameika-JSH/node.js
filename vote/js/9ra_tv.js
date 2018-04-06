@@ -183,7 +183,8 @@
 			swal('투표된 캐릭터가 없습니다.')
 		else
 		{
-			var loop = 20;
+			var loop = 2;
+			var itemHeight = 40;
 			swal(voteBucket[getRand(length)]);
 			//textRolling($(".swal-text"),voteBucket,length,0,loop);
 			
@@ -217,26 +218,36 @@
 			}
 
 			function randomSlotttIndex(max) {
-			  var randIndex = (Math.random() * max | 0);
-			  return (randIndex > 10) ? randIndex : randomSlotttIndex(max);
-			}
-
-			  
+			  return  (Math.random() * max | 0);
+			}			  
 			  
 			function animate(lim) 
 			{
 				console.log(lim);
-			  var wordIndex = randomSlotttIndex(wordlist.length);
-			  $wordbox.animate({top: -9000}, wordlist.length * 250,"linear", function () {
-				rotateContents($wordbox, wordIndex);
-				if(lim > 0) animate(lim-1);
-			  });
+				var wordIndex = randomSlotttIndex(wordlist.length);				
+				$wordbox.animate({top: -itemHeight * wordlist.length}, wordlist.length * 100,"linear", function () 
+				{
+					if(lim > 1)
+					{							
+						rotateContents($wordbox, wordIndex);
+						animate(lim-1);
+					}
+					else if (lim == 1)
+					{
+						rotateContents($wordbox, wordIndex);
+						$wordbox.animate({top: -itemHeight * wordlist.length,opacity : 0}, wordlist.length * 100,"linear", function () 
+						{
+							rotateContents($wordbox, wordIndex);
+							$wordbox.animate({opacity : 1},4500);
+						});
+					}
+				});
 			}
 
 			(function () {
 				$wordbox = $('#wordbox .slottt-machine-recipe__items_container');
 				buildSlotContents($wordbox, wordlist);  
-				animate(2);
+				animate(loop);
 			})()
 		}
 	});
