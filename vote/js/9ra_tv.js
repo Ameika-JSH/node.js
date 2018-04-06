@@ -185,10 +185,62 @@
 		{
 			var loop = 20;
 			swal(voteBucket[getRand(length)]);
-			textRolling($(".swal-text"),voteBucket,length,0,loop);
+			//textRolling($(".swal-text"),voteBucket,length,0,loop);
+			
+			$(".swal-text").html('<div class="slottt-machine-recipe"><div class="slottt-machine-recipe__mask" id="wordbox"><div class="slottt-machine-recipe__items_container recipe_if"></div></div></div>');
+			
+			var wordlist = voteBucket;
+
+			function buildSlotItem (text) {
+				return $('<div>').addClass('slottt-machine-recipe__item')
+								 .text(text)
+			}
+
+			function buildSlotContents ($container, wordlist) {
+			  $items = wordlist.map(buildSlotItem);
+			  $container.append($items);
+			}
+
+			function popPushNItems ($container, n) {
+				$children = $container.find('.slottt-machine-recipe__item');
+				$children.slice(0, n).insertAfter($children.last());
+
+				if (n === $children.length) {
+				  popPushNItems($container, 1);
+				}
+			}
+
+			function rotateContents ($container, n) {
+				  popPushNItems($container, n);
+				  $container.css({top: 0});
+				  
+			}
+
+			function randomSlotttIndex(max) {
+			  var randIndex = (Math.random() * max | 0);
+			  return (randIndex > 10) ? randIndex : randomSlotttIndex(max);
+			}
+
+			  
+			  
+			function animate(lim) 
+			{
+				console.log(lim);
+			  var wordIndex = randomSlotttIndex(wordlist.length);
+			  $wordbox.animate({top: -9000}, wordlist.length * 250,"linear", function () {
+				rotateContents($wordbox, wordIndex);
+				if(lim > 0) animate(lim-1);
+			  });
+			}
+
+			(function () {
+				$wordbox = $('#wordbox .slottt-machine-recipe__items_container');
+				buildSlotContents($wordbox, wordlist);  
+				animate(2);
+			})()
 		}
 	});
-	
+	/*
 	function textRolling(target,list,length,count,loop)
 	{
 		var duration = 100;
@@ -213,7 +265,7 @@
 		},duration);
 		
 	}
-	
+	*/
 	function getRand(length)
 	{
 		return parseInt((Math.random() * 10000)) % length;				
@@ -239,7 +291,6 @@
 		$(".swal-text").attr('id','chartdiv').css('height',height + 'px');
 		var chart = AmCharts.makeChart("chartdiv", {
 		  "type": "serial",
-		  "theme": "none",
 		  "marginRight": 70,
 		  "dataProvider": dataProvider,
 		  "valueAxes": [{
@@ -248,17 +299,22 @@
 				"title": "확률"
 			}],	
 		  "startDuration": 1,
+		  "balloon" :
+		  {
+			  "enabled" : false
+		  },
 		  "graphs": [{
-			"balloonText": "<b>[[category]]: [[value]]</b>",
+			"balloonText": "<b>[[category]]: [[value]]%</b>",
 			"fillColorsField": "color",
 			"fillAlphas": 0.9,
 			"lineAlpha": 0.1,
 			"type": "column",
-			"valueField": "count"
+			"valueField": "count",
+			"labelText" : "[[value]]%"
 		  }],
 		  "chartCursor": {
 			"categoryBalloonEnabled": false,
-			"cursorAlpha": 0.5,
+			"cursorAlpha": 0.1,
 			"zoomable": true
 		  },
 		  "categoryField": "name",
