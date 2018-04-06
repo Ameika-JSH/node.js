@@ -6,6 +6,7 @@
 	var addLimit = {};
 	var sendLimit;
 	var colors = ["#FF0F00","#FF6600","#FF9E01","#FCD202","#F8FF01","#B0DE09","#04D215","#0D8ECF","#0D52D1","#2A0CD0","#8A0CCF","#CD0D74"]
+	var socket;
 	
 	function init()
 	{
@@ -225,7 +226,7 @@
 			{
 				console.log(lim);
 				var wordIndex = randomSlotttIndex(wordlist.length);				
-				$wordbox.animate({top: -itemHeight * wordlist.length}, wordlist.length * 100,"linear", function () 
+				$wordbox.animate({top: -itemHeight * wordlist.length},2000,"linear", function () 
 				{
 					if(lim > 1)
 					{							
@@ -235,10 +236,19 @@
 					else if (lim == 1)
 					{
 						rotateContents($wordbox, wordIndex);
-						$wordbox.animate({top: -itemHeight * wordlist.length,opacity : 0}, wordlist.length * 100,"linear", function () 
+						$wordbox.animate({top: -itemHeight * wordlist.length,opacity : 0}, 1400,"linear", function () 
 						{
 							rotateContents($wordbox, wordIndex);
-							$wordbox.animate({opacity : 1},4500);
+							$wordbox.animate({opacity : 1},4500,function()
+							{
+								var result = $(".slottt-machine-recipe__item").eq(0).text();
+								
+								var list = getRate();
+								var sendMsg = list.filter(function(data){return Object.keys(data)[0] == result;});
+								
+								sendMsg  = '결과 : ' + result + '(' + sendMsg[0][result] + '%)';
+								if(socket) socket.send('PRIVMSG #9ra5646 :' + sendMsg);
+							});
 						});
 					}
 				});
@@ -338,7 +348,7 @@
 		$('[title="JavaScript charts"]').remove();
 	});
 	
-	function getRate()
+	function getRate(n)
 	{
 		var base = 0;
 		var list = [];
@@ -353,8 +363,9 @@
 			var rate = base == 0 ? 0 : 	parseInt($(div).find('input').val()) / base * 100;
 			if(rate > 0) list.push({[$(div).find('p').html()] : rate.toFixed(2)});			
 		});
-		list = sort(list);
-		return list;
+		list = sort(list);		
+		if(!n) n = list.length;
+		return list.slice(0,n);
 	}
 	
 	function sort(list)
@@ -436,7 +447,7 @@
 	function parseChat()
 	{		
 		var irc = 'wss://irc-ws.chat.twitch.tv/';
-		var socket = new WebSocket(irc);
+		socket = new WebSocket(irc);
 		socket.onopen = function()
 		{	
 			$(".vote-title").css('background-color','#2dcaca');
