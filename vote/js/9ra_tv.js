@@ -224,7 +224,6 @@
 			  
 			function animate(lim) 
 			{
-				console.log(lim);
 				var wordIndex = randomSlotttIndex(wordlist.length);				
 				$wordbox.animate({top: -itemHeight * wordlist.length},2000,"linear", function () 
 				{
@@ -247,7 +246,7 @@
 								var sendMsg = list.filter(function(data){return Object.keys(data)[0] == result;});
 								
 								sendMsg  = '결과 : ' + result + '(' + sendMsg[0][result] + '%)';
-								if(socket) socket.send('PRIVMSG #9ra5646 :' + sendMsg);
+								if(socket) setTimeout(function(){socket.send('PRIVMSG #9ra5646 :' + sendMsg);},1000*10);
 							});
 						});
 					}
@@ -256,7 +255,7 @@
 
 			(function () {
 				$wordbox = $('#wordbox .slottt-machine-recipe__items_container');
-				buildSlotContents($wordbox, wordlist);  
+				buildSlotContents($wordbox, wordlist);  				
 				animate(loop);
 			})()
 		}
@@ -538,3 +537,14 @@
 	init();
 	parseChat();
 })();
+/*
+socket = new WebSocket('wss://io.mytwip.net/socket.io/?alertbox_key=vD70z2Nawmo&version=1.1.42&EIO=3&transport=websocket');
+socket.onopen = data=>
+{
+	console.log('open',data);
+	socket.onerror = socket.onclose = socket.onmessage = data => console.log(data);
+}
+
+요런식으로 하면 알람 파싱 가능함
+
+*/
