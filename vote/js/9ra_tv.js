@@ -87,7 +87,7 @@
 			{
 				var input = $(p).siblings('input');				
 				var from  = input.val();
-				rtn = input.val(count ? count : parseInt(input.val()) + 1);
+				rtn = input.val(count ? parseInt(input.val()) + count : parseInt(input.val()) + 1);
 				var to  = input.val();
 				showToast(str,from,to);
 				chk = false;
@@ -534,8 +534,31 @@
 		}
 	}
 	
+	function parseAlam(key)
+	{
+		var alamSocket = new WebSocket('wss://io.mytwip.net/socket.io/?alertbox_key=' + key + '&version=1.1.42&EIO=3&transport=websocket');
+		alamSocket.onopen = function()
+		{			
+			alamSocket.onerror = alamSocket.onclose = data => console.log(data);			
+			alamSocket.onmessage = function(rcv)
+			{
+				var reg = /(\[.*\])/.exec(rcv.data);
+				var json = JSON.parse(reg[1]);
+				if(json[0] == "new donate")
+				{
+					var count = (parseInt(json[1].amount)/1000).toFixed(0);
+					var name = /!추가 (.*)!/.exec(json[1].comment)[1];
+					if(count != "0")
+						doAdd(name + ':' + count);
+				}
+			}
+			//setInterval(function(){alamSocket.send('ping');},1000);
+		}
+	}
+	
 	init();
 	parseChat();
+	parseAlam('vD70z2Nawmo');
 })();
 /*
 socket = new WebSocket('wss://io.mytwip.net/socket.io/?alertbox_key=vD70z2Nawmo&version=1.1.42&EIO=3&transport=websocket');
