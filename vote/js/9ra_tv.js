@@ -7,6 +7,7 @@
 	var sendLimit;
 	var colors = ["#FF0F00","#FF6600","#FF9E01","#FCD202","#F8FF01","#B0DE09","#04D215","#0D8ECF","#0D52D1","#2A0CD0","#8A0CCF","#CD0D74"]
 	var socket;
+	var twipKey = '';
 	
 	function init()
 	{
@@ -367,6 +368,47 @@
 		return list.slice(0,n);
 	}
 	
+	$("#settingButton").click(function()
+	{
+		var div = $('<div>').attr('class','row');		
+		Object.keys(settingData).forEach(function(data)
+		{
+			div.append(getSettingItem(settingDescribe[data],data,window[data]));
+		});
+				
+		swal(div[0])
+		.then(function(rcv)
+		{
+			if(rcv)
+			{
+				var inputs = $('.swal-content .row .input-group input');				
+				inputs.each(function(idx,obj)
+				{
+					obj.type == 'checkbox'
+					? settingData[obj.id] = window[obj.id] = obj.checked
+					: settingData[obj.id] = window[obj.id] = obj.value;
+				});
+				setData('settingData',JSON.stringify(settingData));		
+			}
+		});
+	});
+	
+	function getSettingItem(name,id,value)
+	{
+		return $('<div>').attr('class','input-group input-group-sm mb-3 col-12').html
+			(
+				$('<div>').attr('class','input-group-prepend').html
+				(
+					$('<span>').attr('class','input-group-text').html(name)
+				)
+			).append
+			(
+				typeof value == "boolean" 
+				? $('<input>').attr('type','checkbox').attr('id',id).attr('class','form-control').attr('aria-label','Small').prop('checked',value)
+				: $('<input>').attr('id',id).attr('class','form-control').attr('aria-label','Small').val(value)
+			)	
+	}
+	
 	function sort(list)
 	{
 		//merge sort. need stable
@@ -539,35 +581,27 @@
 		var alamSocket = new WebSocket('wss://io.mytwip.net/socket.io/?alertbox_key=' + key + '&version=1.1.42&EIO=3&transport=websocket');
 		alamSocket.onopen = function()
 		{			
-			alamSocket.onerror = alamSocket.onclose = data => console.log(data);			
+			alamSocket.onerror = data => console.log(data.type,data);			
+			alamSocket.onclose = function(data){console.log(data.type,'reconnect...');parseAlam(twipKey);}
 			alamSocket.onmessage = function(rcv)
 			{
 				var reg = /(\[.*\])/.exec(rcv.data);
-				var json = JSON.parse(reg[1]);
-				if(json[0] == "new donate")
+				if(reg)
 				{
-					var count = (parseInt(json[1].amount)/1000).toFixed(0);
-					var name = /!추가 (.*)!/.exec(json[1].comment)[1];
-					if(count != "0")
-						doAdd(name + ':' + count);
+					var json = JSON.parse(reg[1]);
+					if(json[0] == "new donate")
+					{
+						var count = (parseInt(json[1].amount)/1000).toFixed(0);
+						var name = /!추가 (.*)!/.exec(json[1].comment)[1];
+						if(count != "0")
+							doAdd(name + ':' + count).change();
+					}
 				}
 			}
-			//setInterval(function(){alamSocket.send('ping');},1000);
 		}
 	}
-	
+		
 	init();
 	parseChat();
-	parseAlam('vD70z2Nawmo');
+	//parseAlam(twipKey);
 })();
-/*
-socket = new WebSocket('wss://io.mytwip.net/socket.io/?alertbox_key=vD70z2Nawmo&version=1.1.42&EIO=3&transport=websocket');
-socket.onopen = data=>
-{
-	console.log('open',data);
-	socket.onerror = socket.onclose = socket.onmessage = data => console.log(data);
-}
-
-요런식으로 하면 알람 파싱 가능함
-
-*/

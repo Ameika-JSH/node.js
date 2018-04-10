@@ -54,25 +54,75 @@ var defaultCount = 0;
  * ex : 입력값 -> 브라이언 = 브라이언 + 1, 브라이언:10 = 브라이언 10,  없는캐릭 = 없는캐릭 생성 및 1, 없는캐릭:10 = 없는캐릭 생성 및 10
  * 다른 문자로 하고싶으시면 아래 값을 변경 해 주세요.
  */
- var piv = ':';
- 
- /* 시청자가 채팅으로 0인거 1로 할 수 있게 할지(1개제한) -  사용 = true , 사용안함 = false*/
- var useViewerAdd = true;
- /* 시청자가 채팅으로 새로운 항목 추가하게 할지 */ 
- var useViewerCreate = false;
- /* 시청자가 채팅으로 새로운 항목 추가할때 제한시간 (분단위)*/
- var viewerCreateCooltime = 5;
- /* 시청자가 채팅으로 추가할때 사용할 명령어 */
- var commandViewerAdd = '!추가';
- /* 시청자 기존항목 0->1 시간제한(초단위)*/
- var viewerAddCooltime = 60*60;
- 
- /* 채팅에 반응해서 메세지 보내는 시간 제한 (초단위) */
- var sendLimitSeconds = 10;
- 
- /* 시청자가 채팅으로 순위 볼수 있게 할지 말지 */
- var useViewerGetRank = true; 
- /* 시청자가 채팅으로 순위 볼때 사용할 명령어 */
- var commandViewerGetRank = '!확률';
- /* 시청자가 순위 볼때 보여줄 갯수 ( ex : 3 => 1등2등3등)*/
- var limitViewerGetRank = 3;
+var piv = ':';
+
+/* 시청자가 채팅으로 0인거 1로 할 수 있게 할지(1개제한) -  사용 = true , 사용안함 = false*/
+var useViewerAdd = true;
+/* 시청자가 채팅으로 새로운 항목 추가하게 할지 */ 
+var useViewerCreate = false;
+/* 시청자가 채팅으로 새로운 항목 추가할때 제한시간 (분단위)*/
+var viewerCreateCooltime = 5;
+/* 시청자가 채팅으로 추가할때 사용할 명령어 */
+var commandViewerAdd = '!추가';
+/* 시청자 기존항목 0->1 시간제한(초단위)*/
+var viewerAddCooltime = 60*60;
+
+/* 채팅에 반응해서 메세지 보내는 시간 제한 (초단위) */
+var sendLimitSeconds = 10;
+
+/* 시청자가 채팅으로 순위 볼수 있게 할지 말지 */
+var useViewerGetRank = true; 
+/* 시청자가 채팅으로 순위 볼때 사용할 명령어 */
+var commandViewerGetRank = '!확률';
+/* 시청자가 순위 볼때 보여줄 갯수 ( ex : 3 => 1등2등3등)*/
+var limitViewerGetRank = 3;
+
+var settingDescribe = 
+{
+	defaultCount : '리셋시갯수',
+	piv : '복수입력구분자',
+	useViewerAdd : '시청자갯수증가',
+	useViewerCreate : '시청자 항목생성',
+	viewerCreateCooltime : '항목생성 쿨타임(분)',
+	commandViewerAdd : '시청자참여 명령어',
+	viewerAddCooltime : '갯수증가 쿨타임(초)',
+	sendLimitSeconds : '매크로채팅 제한시간(초)',
+	useViewerGetRank : '확률확인 사용',
+	commandViewerGetRank : '확률확인 명령어',
+	limitViewerGetRank : '확률확인 갯수'
+}
+
+var settingData = localStorage.settingData;
+
+if(settingData)
+{
+	settingData = JSON.parse(settingData);	
+	defaultCount = settingData.defaultCount;
+	piv = settingData.piv;
+	useViewerAdd = settingData.useViewerAdd;
+	useViewerCreate = settingData.useViewerCreate;
+	viewerCreateCooltime = settingData.viewerCreateCooltime;
+	commandViewerAdd = settingData.commandViewerAdd;
+	viewerAddCooltime = settingData.viewerAddCooltime;
+	sendLimitSeconds = settingData.sendLimitSeconds;
+	useViewerGetRank = settingData.useViewerGetRank; 
+	commandViewerGetRank = settingData.commandViewerGetRank;
+	limitViewerGetRank = settingData.limitViewerGetRank;
+}
+else
+{
+	settingData = {};
+	settingData.defaultCount = defaultCount;
+	settingData.piv = piv;
+	settingData.useViewerAdd = useViewerAdd;
+	settingData.useViewerCreate = useViewerCreate;
+	settingData.viewerCreateCooltime = viewerCreateCooltime;
+	settingData.commandViewerAdd = commandViewerAdd;
+	settingData.viewerAddCooltime = viewerAddCooltime;
+	settingData.sendLimitSeconds = sendLimitSeconds;
+	settingData.useViewerGetRank = useViewerGetRank; 
+	settingData.commandViewerGetRank = commandViewerGetRank;
+	settingData.limitViewerGetRank = limitViewerGetRank;
+}
+
+localStorage.settingData = JSON.stringify(settingData);

@@ -157,6 +157,16 @@ footer p
 	text-align : center;
 }
 
+.input-group-text
+{
+	width : 15em;
+}
+
+[type=checkbox]
+{
+	height : 100%;
+}
+
 /* Typography */
 
 body {
@@ -178,3 +188,4 @@ a {
  text-decoration: none;
  color: #33CCFF;
 }
+
