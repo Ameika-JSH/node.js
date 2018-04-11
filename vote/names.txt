@@ -80,6 +80,8 @@ var limitViewerGetRank = 3;
 var donateDelimiter = '@';
 /* 도네로 캐릭터 추가할때 금액별 비율(소수점 버림) */
 var donateUnit = 1000;
+/* TTS기능 사용 할지 말지 */
+var useTTS = true;
 
 var settingDescribe = 
 {
@@ -95,17 +97,21 @@ var settingDescribe =
 	commandViewerGetRank : '확률확인 명령어',
 	limitViewerGetRank : '확률확인 갯수',
 	donateDelimiter : '도네추가 구분자',
-	donateUnit : '도네추가 금액단위'
+	donateUnit : '도네추가 금액단위',
+	useTTS : 'TTS사용'
 }
 
 var settingData = localStorage.settingData;
+
 if(settingData && 
 	(
 		!settingData.includes('donateDelimiter') || 
-		!settingData.includes('donateUnit')
+		!settingData.includes('donateUnit') ||
+		!settingData.includes('useTTS')
 	)
 ) 
 {
+	console.log(123);
 	localStorage.clear();
 	settingData = localStorage.settingData;
 }
@@ -127,6 +133,7 @@ if(settingData)
 	limitViewerGetRank = settingData.limitViewerGetRank;
 	donateDelimiter = settingData.donateDelimiter;
 	donateUnit = settingData.donateUnit;
+	useTTS = settingData.useTTS;
 }
 else
 {
@@ -144,6 +151,7 @@ else
 	settingData.limitViewerGetRank = limitViewerGetRank;
 	settingData.donateDelimiter = donateDelimiter;
 	settingData.donateUnit = donateUnit;
+	settingData.useTTS = useTTS;
 }
 
 localStorage.settingData = JSON.stringify(settingData);

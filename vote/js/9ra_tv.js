@@ -120,11 +120,12 @@
 	}
 	
 	function showToast(name,from,to)
-	{
+	{		
+		tts(name + (to-from) + '개 추가' );
 		$.notify(
 		{
 			title:name,
-			message : from + '→' + to			
+			message :  from + '→' + to	
 		},
 		{
 			newest_on_top : true,
@@ -247,7 +248,8 @@
 								var list = getRate();
 								var sendMsg = list.filter(function(data){return Object.keys(data)[0] == result;});
 								
-								sendMsg  = '결과 : ' + result + '(' + sendMsg[0][result] + '%)';
+								sendMsg  = '결과 : ' + result + '(' + sendMsg[0][result] + '%)';			
+								tts(sendMsg);								
 								if(socket) setTimeout(function(){socket.send('PRIVMSG #9ra5646 :' + sendMsg);},1000*10);								
 							});
 						});
@@ -576,6 +578,7 @@
 								str += key + ' : ' + list[i][key] + '%';
 							}
 							socket.send('PRIVMSG #9ra5646 :' + str);
+							tts(str);
 							sendLimit = new Date();
 						}
 					}
@@ -606,6 +609,15 @@
 					}
 				}
 			}
+		}
+	}
+	
+	function tts(text)
+	{
+		if(useTTS)
+		{
+			var audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=0&client=tw-ob&tl=ko-kr&q=' + text);
+			audio.play();								
 		}
 	}
 		
