@@ -121,7 +121,7 @@
 	
 	function showToast(name,from,to)
 	{		
-		tts(name + (to-from) + '개 추가' );
+		tts(name +' ' + (to-from) + '개 추가' );
 		$.notify(
 		{
 			title:name,
@@ -614,9 +614,12 @@
 	
 	function tts(text)
 	{
-		if(useTTS)
+		if(useTTS)			
 		{
-			var audio = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=0&client=tw-ob&tl=ko-kr&q=' + text);
+			var man = 'https://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=0&client=tw-ob&tl=ko-kr&q=';
+			var woman = 'https://www.google.com/speech-api/v1/synthesize?lang=ko-kr&speed=0.5&text=';
+			//설정에서 남여 선택, 음성 도구,
+			var audio = new Audio(woman + text);
 			audio.play();								
 		}
 	}
