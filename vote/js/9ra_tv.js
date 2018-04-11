@@ -241,13 +241,14 @@
 							rotateContents($wordbox, wordIndex);
 							$wordbox.animate({opacity : 1},4500,function()
 							{
+								addLimit = {};
 								var result = $(".slottt-machine-recipe__item").eq(0).text();
 								
 								var list = getRate();
 								var sendMsg = list.filter(function(data){return Object.keys(data)[0] == result;});
 								
 								sendMsg  = '결과 : ' + result + '(' + sendMsg[0][result] + '%)';
-								if(socket) setTimeout(function(){socket.send('PRIVMSG #9ra5646 :' + sendMsg);},1000*10);
+								if(socket) setTimeout(function(){socket.send('PRIVMSG #9ra5646 :' + sendMsg);},1000*10);								
 							});
 						});
 					}
@@ -485,6 +486,28 @@
 		init();
 	}
 	
+	function doAddForViewer(isDonate,name,displayName,count)
+	{
+		if(isDonate || !voteData[name] || voteData[name] == 0)
+		{
+			if(targets.includes(name) &&
+			 (isDonate || !addLimit[displayName] || (new Date() - addLimit[displayName]) > viewerAddCooltime * 1000))
+			{
+				if(count) name += ':' + count;
+				doAdd(name).change();
+				if(!isDonate) addLimit[displayName] = new Date();
+			}
+			else if(useViewerCreate &&
+						(isDonate || !createLimit[displayName] || 
+						 (new Date()) - createLimit[displayName] > 1000*60*viewerCreateCooltime))
+			{
+				if(count) name += ':' + count;
+				doAdd(name).change();
+				if(!isDonate) createLimit[displayName] = new Date();
+			}
+		}
+	}
+	
 	function parseChat()
 	{		
 		var irc = 'wss://irc-ws.chat.twitch.tv/';
@@ -537,23 +560,8 @@
 					
 					if(useViewerAdd &&  userType.startsWith(commandViewerAdd + ' ')) 
 					{	
-						var tmp = userType.split(commandViewerAdd + ' ')[1].replace(/(\r\n|\n|\r)/gm, "");							
-						if((!voteData[tmp] || voteData[tmp] == 0))
-						{
-							if(targets.includes(tmp) &&
-							 (!addLimit[displayName] || (new Date() - addLimit[displayName]) > viewerAddCooltime * 1000))
-							{
-								doAdd(tmp).change();
-								addLimit[displayName] = new Date();
-							}
-							else if(useViewerCreate &&
-										(!createLimit[displayName] || 
-										 (new Date()) - createLimit[displayName] > 1000*60*viewerCreateCooltime))
-							{
-								doAdd(tmp).change();
-								createLimit[displayName] = new Date();
-							}
-						}
+						var tmp = userType.split(commandViewerAdd + ' ')[1].replace(/(\r\n|\n|\r)/gm, "");													
+						doAddForViewer(false,tmp,displayName);
 					}
 					else if(!sendLimit || new Date() - sendLimit > 1000*sendLimitSeconds)
 					{						
@@ -591,10 +599,10 @@
 					var json = JSON.parse(reg[1]);
 					if(json[0] == "new donate")
 					{
-						var count = (parseInt(json[1].amount)/1000).toFixed(0);
-						var name = /!추가 (.*)!/.exec(json[1].comment)[1];
+						var count = (parseInt(json[1].amount)/donateUnit).toFixed(0);
+						var name = RegExp(donateDelimiter + '([^' + donateDelimiter + ']*)' + donateDelimiter).exec(json[1].comment)[1];
 						if(count != "0")
-							doAdd(name + ':' + count).change();
+							doAddForViewer(true,name,json[1].nickname,count);
 					}
 				}
 			}
@@ -603,5 +611,5 @@
 		
 	init();
 	parseChat();
-	//parseAlam(twipKey);
+	parseAlam(twipKey);
 })();

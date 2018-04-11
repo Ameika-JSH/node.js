@@ -76,6 +76,10 @@ var useViewerGetRank = true;
 var commandViewerGetRank = '!확률';
 /* 시청자가 순위 볼때 보여줄 갯수 ( ex : 3 => 1등2등3등)*/
 var limitViewerGetRank = 3;
+/* 도네로 캐릭터 추가할때 캐릭터 구분 할 구분자 (예 : ! => @리리@,@녹티스@,@알리사@) */
+var donateDelimiter = '@';
+/* 도네로 캐릭터 추가할때 금액별 비율(소수점 버림) */
+var donateUnit = 1000;
 
 var settingDescribe = 
 {
@@ -89,10 +93,23 @@ var settingDescribe =
 	sendLimitSeconds : '매크로채팅 제한시간(초)',
 	useViewerGetRank : '확률확인 사용',
 	commandViewerGetRank : '확률확인 명령어',
-	limitViewerGetRank : '확률확인 갯수'
+	limitViewerGetRank : '확률확인 갯수',
+	donateDelimiter : '도네추가 구분자',
+	donateUnit : '도네추가 금액단위'
 }
 
 var settingData = localStorage.settingData;
+if(settingData && 
+	(
+		!settingData.includes('donateDelimiter') || 
+		!settingData.includes('donateUnit')
+	)
+) 
+{
+	localStorage.clear();
+	settingData = localStorage.settingData;
+}
+
 
 if(settingData)
 {
@@ -108,6 +125,8 @@ if(settingData)
 	useViewerGetRank = settingData.useViewerGetRank; 
 	commandViewerGetRank = settingData.commandViewerGetRank;
 	limitViewerGetRank = settingData.limitViewerGetRank;
+	donateDelimiter = settingData.donateDelimiter;
+	donateUnit = settingData.donateUnit;
 }
 else
 {
@@ -123,6 +142,8 @@ else
 	settingData.useViewerGetRank = useViewerGetRank; 
 	settingData.commandViewerGetRank = commandViewerGetRank;
 	settingData.limitViewerGetRank = limitViewerGetRank;
+	settingData.donateDelimiter = donateDelimiter;
+	settingData.donateUnit = donateUnit;
 }
 
 localStorage.settingData = JSON.stringify(settingData);
