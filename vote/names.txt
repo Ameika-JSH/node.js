@@ -82,6 +82,19 @@ var donateDelimiter = '@';
 var donateUnit = 1000;
 /* TTS기능 사용 할지 말지 */
 var useTTS = true;
+/* TTS 남/여 선택*/
+var ttsSelect = 'radio_voice_woman';
+
+/* radio 설정*/
+var radioSetting =
+{
+	voice : 
+	{
+		name : 'ttsSelect',
+		values : ['radio_voice_man','radio_voice_woman'],
+		label : {'radio_voice_man' : '남자','radio_voice_woman' : '여자'}
+	}
+}
 
 var settingDescribe = 
 {
@@ -98,7 +111,8 @@ var settingDescribe =
 	limitViewerGetRank : '확률확인 갯수',
 	donateDelimiter : '도네추가 구분자',
 	donateUnit : '도네추가 금액단위',
-	useTTS : 'TTS사용'
+	useTTS : 'TTS사용',
+	ttsSelect : 'TTS목소리'
 }
 
 var settingData = localStorage.settingData;
@@ -107,11 +121,11 @@ if(settingData &&
 	(
 		!settingData.includes('donateDelimiter') || 
 		!settingData.includes('donateUnit') ||
-		!settingData.includes('useTTS')
+		!settingData.includes('useTTS') ||
+		!settingData.includes('ttsSelect')
 	)
 ) 
 {
-	console.log(123);
 	localStorage.clear();
 	settingData = localStorage.settingData;
 }
@@ -134,6 +148,7 @@ if(settingData)
 	donateDelimiter = settingData.donateDelimiter;
 	donateUnit = settingData.donateUnit;
 	useTTS = settingData.useTTS;
+	ttsSelect = settingData.ttsSelect;
 }
 else
 {
@@ -152,6 +167,7 @@ else
 	settingData.donateDelimiter = donateDelimiter;
 	settingData.donateUnit = donateUnit;
 	settingData.useTTS = useTTS;
+	settingData.ttsSelect = ttsSelect;
 }
 
 localStorage.settingData = JSON.stringify(settingData);

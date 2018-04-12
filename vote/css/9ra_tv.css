@@ -162,7 +162,7 @@ footer p
 	width : 15em;
 }
 
-[type=checkbox]
+[type=checkbox],[type=radio]
 {
 	height : 100%;
 }

@@ -7,7 +7,7 @@
 	var sendLimit;
 	var colors = ["#FF0F00","#FF6600","#FF9E01","#FCD202","#F8FF01","#B0DE09","#04D215","#0D8ECF","#0D52D1","#2A0CD0","#8A0CCF","#CD0D74"]
 	var socket;
-	var twipKey = '';
+	var twipKey = 'vDRv9Vnw49J';
 	
 	function init()
 	{
@@ -386,10 +386,13 @@
 			{
 				var inputs = $('.swal-content .row .input-group input');				
 				inputs.each(function(idx,obj)
-				{
-					obj.type == 'checkbox'
-					? settingData[obj.id] = window[obj.id] = obj.checked
-					: settingData[obj.id] = window[obj.id] = obj.value;
+				{					
+					if(obj.type == 'checkbox')
+						settingData[obj.id] = window[obj.id] = obj.checked
+					else if(obj.type == 'radio' && obj.checked)
+						settingData[obj.name] = window[obj.name] = obj.id;
+					else if(obj.type != 'radio')
+						settingData[obj.id] = window[obj.id] = obj.value;
 				});
 				setData('settingData',JSON.stringify(settingData));		
 			}
@@ -398,18 +401,31 @@
 	
 	function getSettingItem(name,id,value)
 	{
+		var input;
+		if(typeof value == "boolean")
+			input = $('<input>').attr('type','checkbox').attr('id',id).attr('class','form-control').attr('aria-label','Small').prop('checked',value);
+		else if(typeof value == "string" && value.startsWith('radio'))
+		{
+			var split = value.split('_');
+			input = [];
+			for(var  i = 0;i < radioSetting[split[1]].values.length ; i++)
+			{
+				input[i*2] = '<label>' + radioSetting[split[1]].label[radioSetting[split[1]].values[i]];
+				var radio = $('<input>').attr('type','radio').attr('name',radioSetting[split[1]].name).attr('id',radioSetting[split[1]].values[i]).attr('class','form-control').attr('aria-label','Small');
+				if(radioSetting[split[1]].values[i] == ttsSelect) radio.prop('checked',true);
+				input[i*2+1] = radio;
+			}
+		}
+		else
+			input = $('<input>').attr('id',id).attr('class','form-control').attr('aria-label','Small').val(value)				
+		
 		return $('<div>').attr('class','input-group input-group-sm mb-3 col-12').html
 			(
 				$('<div>').attr('class','input-group-prepend').html
 				(
 					$('<span>').attr('class','input-group-text').html(name)
 				)
-			).append
-			(
-				typeof value == "boolean" 
-				? $('<input>').attr('type','checkbox').attr('id',id).attr('class','form-control').attr('aria-label','Small').prop('checked',value)
-				: $('<input>').attr('id',id).attr('class','form-control').attr('aria-label','Small').val(value)
-			)	
+			).append(input)	
 	}
 	
 	function sort(list)
@@ -618,8 +634,14 @@
 		{
 			var man = 'https://translate.google.com/translate_tts?ie=UTF-8&total=1&idx=0&textlen=0&client=tw-ob&tl=ko-kr&q=';
 			var woman = 'https://www.google.com/speech-api/v1/synthesize?lang=ko-kr&speed=0.5&text=';
-			//설정에서 남여 선택, 음성 도구,
-			var audio = new Audio(woman + text);
+			var voice;
+			if(ttsSelect == 'radio_voice_man')
+				voice = man;
+			else
+				voice = woman;
+				
+			//음성 도구,
+			var audio = new Audio( voice + text);
 			audio.play();								
 		}
 	}
